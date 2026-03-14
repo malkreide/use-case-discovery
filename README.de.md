@@ -124,4 +124,4 @@ MIT-Lizenz — siehe [LICENSE](LICENSE)
 
 ## Autor
 
-Hayal Küey · [GitHub](https://github.com/malkreide)
+Hayal Oezkan · [GitHub](https://github.com/malkreide)
