@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Documentation now matches the shipped prompt: the context dimensions (A–G) and
+  cross-inspiration sources are described as configurable placeholders rather than
+  as fixed content. The author's own setup (Schulamt, city administration, AI working
+  group, education, family, investments, making) is retained as a clearly labelled
+  example configuration.
+- Feature list no longer advertises a fixed count of 7 dimensions or names specific
+  cross-inspiration projects (SIGMA v2.0, immoinvest) as if they were part of the
+  template.
+- Design rationale in both READMEs and in `use-case-discovery.md` reworded from
+  "Why 7 dimensions?" to the general case, aligned with the prompt's own 4–8
+  recommendation.
+
+### Added
+- "Configuration" section in both READMEs describing the two placeholder blocks that
+  must be filled before first use.
+
 ## [1.0.0] - 2026-03-14
 
 ### Added

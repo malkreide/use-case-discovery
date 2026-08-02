@@ -226,8 +226,9 @@ Ohne Handlungsanker bleibt Ideengenerierung akademisch. Der 1-Tages-Constraint
 verhindert Paralyse durch Perfektionismus. Der Notion-Tag sorgt dafür, dass
 jede Idee sofort ins Repository fliesst und nicht verloren geht.
 
-**Warum 7 Kontextdimensionen?**
-Die Dimensionen A–G repräsentieren reale Rollen und Lebensbereiche mit je eigenen
-Constraints, Stakeholdern und Erfolgskriterien. Ein Tool, das in Dimension G
-(Technologie) trivial erscheint, kann in Dimension A (Kernorganisation) transformativ
-sein — und umgekehrt.
+**Warum mehrere Kontextdimensionen?**
+Die Dimensionen repräsentieren reale Rollen und Lebensbereiche mit je eigenen
+Constraints, Stakeholdern und Erfolgskriterien. Ein Tool, das in einem technischen
+Kontext trivial erscheint, kann in der Kernorganisation transformativ sein — und
+umgekehrt. Die Vorlage bietet sieben Slots (A–G) an; empfohlen sind 4–8 Dimensionen.
+Unter vier entsteht die produktive Spannung selten, über acht verwässert sie.
