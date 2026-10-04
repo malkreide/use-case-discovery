@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.2.1-blue)
+![Version](https://img.shields.io/badge/version-2.3.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -14,7 +14,7 @@
 
 `use-case-discovery` is a prompt template for **Claude Code** that turns any GitHub repository, research paper, or technology tool into a structured use case analysis. It does not just ask "what can this do?" — it forces domain-independent abstraction first, then maps potential applications across several distinct context dimensions, and finally generates unexpected combinations through deliberate cross-pollination with your own existing frameworks and projects.
 
-The prompt ships **unconfigured**: context dimensions and cross-inspiration sources are placeholders you fill with your own roles, organisations, and projects. See [Configuration](#configuration) — the prompt is not useful until you do this.
+The prompt ships **unconfigured**: context dimensions and cross-inspiration sources are placeholders you fill with your own roles, organisations, and projects. See [Configuration](#configuration). Unconfigured, the prompt runs with three neutral fallback dimensions and says so in the output: fine for a first try, too generic for real work.
 
 ---
 
@@ -23,8 +23,11 @@ The prompt ships **unconfigured**: context dimensions and cross-inspiration sour
 - **Source check first**: the source must actually be read; the output opens with a source status and stops if the source is unreachable
 - **Source types**: GitHub repos, papers and web pages, Notion pages (via a connected Notion MCP server), video and podcast transcripts, local files including PDFs
 - **5-step structured analysis** from technical abstraction to actionable top-3 recommendations
-- **Configurable context dimensions** (4–8 recommended) covering whatever roles and domains you operate in
+- **Source is material, not instructions**: instructions inside the analysed source are not followed but flagged in the source status
+- **Configurable context dimensions** (4–8 recommended) covering whatever roles and domains you operate in; a dimension without a plausible fit stays empty with a reason instead of being padded with filler ideas
 - **Combinatorics step** forcing unexpected combinations with your own frameworks, projects, and infrastructure
+- **Traceable selection**: the strongest candidates are scored in a table before the top 3, with a reason per row
+- **Configurable guardrails** as exclusion criteria; every top-3 use case names its risks and prerequisites
 - **Actionable output** with next steps constrained to 1-day effort and Notion tags from a fixed, configurable list
 - **Claude Code slash command**: `/use-case-discovery <source>`, interactive or headless
 
@@ -39,15 +42,17 @@ The prompt ships **unconfigured**: context dimensions and cross-inspiration sour
 
 ## Configuration
 
-Before first use, fill in the two placeholder blocks in `.claude/commands/use-case-discovery.md` and check the role and the tag list. All four are marked with a ⚙️ note in the prompt itself.
+Before first use, fill in the two placeholder blocks in `.claude/commands/use-case-discovery.md` and check the role, the guardrails and the tag list. All five are marked with a ⚙️ note in the prompt itself.
 
 **1 — Role.** Three fields set the perspective the analysis is written from: *Rolle* (the viewpoint ideas are judged from), *Expertise* (2–4 fields, ideally covering your dimensions from step 2) and *Haltung* (how critical, risk-aware or experimental the assessment is). The shipped default is domain-neutral and works unconfigured. The author's earlier setting, for illustration: a strategic innovation advisor with expertise in AI applications, education, public administration, and technology product development.
 
-**2 — Context dimensions (step 2).** Replace `[NAME DIMENSION A]` … `[NAME DIMENSION G]` with your own roles, organisations, and areas of life. The count is not fixed — 4–8 dimensions work well. What matters is *contrast*: pick contexts with genuinely different constraints, stakeholders, and success criteria. The greater the distance between dimensions, the more productive the matrix.
+**2 — Guardrails (Leitplanken).** Exclusion criteria that apply in your environment: a use case that violates one does not make the top 3. It may still appear in steps 2 and 3 if the condition under which it would comply is named. The shipped default is domain-neutral (sensitive personal data, automated decisions about people, the source's licence) and works unconfigured. 3–6 testable exclusions ("No …") are recommended. In the author's environment these would be, for example, the Zurich cantonal information and data protection act (IDG), the city's rules on AI use, and the protection of pupils' data.
 
-**3 — Cross-inspiration sources (step 3).** Replace the `[NAME PROJEKT / FRAMEWORK]` entries with frameworks, projects, components, hardware, and platforms **you already have**. 3–6 entries, each with a one-sentence description of its core mechanism. The more concrete the description, the better the combinations.
+**3 — Context dimensions (step 2).** Replace `[NAME DIMENSION A]` … `[NAME DIMENSION G]` with your own roles, organisations, and areas of life. The count is not fixed — 4–8 dimensions work well. What matters is *contrast*: pick contexts with genuinely different constraints, stakeholders, and success criteria. The greater the distance between dimensions, the more productive the matrix.
 
-**4 — Notion tags (step 4).** The prompt ships with a domain-neutral list of eight tags and assigns exactly one per top-3 use case; it never invents new ones, and proposes a new tag separately when none fits. Replace the list with the options of your Notion select property so the values match exactly. This block works unconfigured.
+**4 — Cross-inspiration sources (step 3).** Replace the `[NAME PROJEKT / FRAMEWORK]` entries with frameworks, projects, components, hardware, and platforms **you already have**. 3–6 entries, each with a one-sentence description of its core mechanism. The more concrete the description, the better the combinations.
+
+**5 — Notion tags (step 4).** The prompt ships with a domain-neutral list of eight tags and assigns exactly one per top-3 use case; it never invents new ones, and proposes a new tag separately when none fits. Replace the list with the options of your Notion select property so the values match exactly. This block works unconfigured.
 
 The prompt keeps its placeholders on purpose, so the repository stays reusable. Your filled-in version is personal — keep it in your own project rather than committing it back here.
 
@@ -69,7 +74,7 @@ mkdir -p ~/.claude/commands && cp .claude/commands/use-case-discovery.md ~/.clau
 mkdir -p /path/to/project/.claude/commands && cp .claude/commands/use-case-discovery.md /path/to/project/.claude/commands/
 ```
 
-Inside this repository the command is available as-is, which is handy for trying the unconfigured template.
+Inside this repository the command is available as-is, which is handy for trying the unconfigured template. It works with neutral fallback dimensions and says so in the output.
 
 ### Option A — Interactive
 
@@ -117,9 +122,9 @@ The command pre-approves the read-only tools it needs (`WebFetch`, `Read`, `Glob
 |---|---|
 | **0 — Source Check** | Read the source; report status: fully read, partially read, or unreachable (stop) |
 | **1 — Tool Analysis** | Domain-independent abstraction of the core mechanism; inferences marked as assumptions |
-| **2 — Use Case Matrix** | Your configured context dimensions, with targeted use cases per dimension |
+| **2 — Use Case Matrix** | Your configured context dimensions, with targeted use cases per dimension; left empty with a reason when there is no plausible fit |
 | **3 — Combinatorics** | 2–3 unexpected combinations with your own frameworks/projects |
-| **4 — Top-3 Recommendation** | Ranked by impact, feasibility, novelty — with next step and a Notion tag from the fixed list |
+| **4 — Top-3 Recommendation** | Scoring table of the 5–8 strongest candidates (impact, feasibility, novelty; 1–3), exclusion on a violated guardrail; top 3 with risks & prerequisites, next step and a Notion tag from the fixed list |
 | **5 — Open Questions** | 3–5 generative questions for further research or discussion |
 
 ### Example configuration (A–G)
@@ -150,6 +155,15 @@ Real-world contexts have different constraints, stakeholders, and success criter
 
 **Why read the source first?**
 An analysis built on a source that was never read looks just as convincing as a real one. The source status shows what the analysis rests on, and stopping when the source is unreachable prevents a plausible but invented core description from carrying the whole matrix.
+
+**Why may a dimension stay empty?**
+Demanding ideas in every dimension produces filler in the ill-fitting ones, and filler sounds just as convincing as the good ideas. "No plausible fit", with a reason, is an honest statement about a tool's reach.
+
+**Why a scoring table before the top 3?**
+Without visible scoring the selection can be neither checked nor discussed. The table shows which candidates were in the running and why. Novelty is marked as an assumption because it is estimated without research.
+
+**Why guardrails?**
+A critical stance alone does not stop an impressive but impermissible idea from landing in first place. Guardrails turn the limits that already apply in your environment into a checkable part of the selection.
 
 **Why a 1-day next step?**
 Without an action anchor, idea generation stays academic. The 1-day constraint prevents perfectionism paralysis and turns insight into momentum.
