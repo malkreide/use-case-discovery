@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Corrected the `[1.0.0]` entry below, which described the author's personal
+  configuration as though it shipped with the prompt.
+
 ## [1.0.1] - 2026-09-28
 
 ### Changed
@@ -31,7 +35,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of `use-case-discovery.md` prompt
 - 5-step structured analysis framework (Tool Analysis → Use Case Matrix → Combinatorics → Top-3 → Open Questions)
-- 7 context dimensions covering Schulamt, city administration, AI working group, education, family, investments, and making/technology
-- Combinatorics step with SIGMA v2.0, immoinvest, MCP servers, Raspberry Pi, and Notion as cross-inspiration sources
+- Seven placeholder context dimension slots (A–G), to be filled with the reader's own
+  roles, organisations, and areas of life; the prompt recommends 4–8
+- Combinatorics step with five placeholder cross-inspiration slots, to be filled with
+  the reader's own frameworks, projects, technical components, hardware, and platforms
 - Three usage modes: interactive Claude Code, file argument, bash substitution
 - Bilingual README (English / German with Swiss spelling conventions)
+
+> **Note** — this entry was corrected on 2026-10-04. As originally written it listed
+> the author's personal configuration (Schulamt, city administration, AI working group,
+> education, family, investments, making; SIGMA v2.0, immoinvest, MCP servers,
+> Raspberry Pi, Notion) as though those dimensions and sources shipped with the prompt.
+> They did not — 1.0.0 shipped placeholders throughout, and Notion appeared only as the
+> tag field in step 4, never as a cross-inspiration source. See [1.0.1] for the
+> corresponding correction in the READMEs.
