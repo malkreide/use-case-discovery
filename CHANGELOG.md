@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-04
+
 ### Changed
 - **Breaking:** the prompt moved from `use-case-discovery.md` to
   `.claude/commands/use-case-discovery.md` and is now a Claude Code custom slash
@@ -14,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   instead of the `[HIER URL / REPO / PAPER EINFÜGEN]` placeholder; without an argument
   the prompt asks for the source. Frontmatter pre-approves the read-only tools it
   needs (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`) so headless runs work.
+  **Upgrading from 1.x:** copy the new file to `~/.claude/commands/` (or a project's
+  `.claude/commands/`), then carry over your filled-in dimensions (step 2) and
+  cross-inspiration sources (step 3) from your old copy. Scripts calling
+  `claude -p use-case-discovery.md` or the `sed` pipe should switch to
+  `claude -p "/use-case-discovery <source>"`.
 - Notion tag in step 4 is now chosen from a fixed, configurable list of eight
   domain-neutral tags (exactly one per use case). New tags are never invented;
   when none fits, a new tag is proposed separately.
