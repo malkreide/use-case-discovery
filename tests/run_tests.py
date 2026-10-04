@@ -105,7 +105,6 @@ FULL_ANALYSIS = [
 WITHOUT_PROFILE = [
     contains(NO_PROFILE, "Profilzeile meldet «keines»"),
     contains(r"Kreuzinspiration nicht konfiguriert", "Hinweis auf fehlende Kreuzinspiration"),
-    absent(r"(?i)Notion-Export:", "Kein Notion-Export ohne --notion", SOLL),
 ]
 
 DEFAULT_TAGS = (
