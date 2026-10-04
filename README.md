@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -38,13 +38,15 @@ The prompt ships **unconfigured**: context dimensions and cross-inspiration sour
 
 ## Configuration
 
-Before first use, fill in the two placeholder blocks in `.claude/commands/use-case-discovery.md` and check the tag list. All three are marked with a ⚙️ note in the prompt itself.
+Before first use, fill in the two placeholder blocks in `.claude/commands/use-case-discovery.md` and check the role and the tag list. All four are marked with a ⚙️ note in the prompt itself.
 
-**1 — Context dimensions (step 2).** Replace `[NAME DIMENSION A]` … `[NAME DIMENSION G]` with your own roles, organisations, and areas of life. The count is not fixed — 4–8 dimensions work well. What matters is *contrast*: pick contexts with genuinely different constraints, stakeholders, and success criteria. The greater the distance between dimensions, the more productive the matrix.
+**1 — Role.** Three fields set the perspective the analysis is written from: *Rolle* (the viewpoint ideas are judged from), *Expertise* (2–4 fields, ideally covering your dimensions from step 2) and *Haltung* (how critical, risk-aware or experimental the assessment is). The shipped default is domain-neutral and works unconfigured. The author's earlier setting, for illustration: a strategic innovation advisor with expertise in AI applications, education, public administration, and technology product development.
 
-**2 — Cross-inspiration sources (step 3).** Replace the `[NAME PROJEKT / FRAMEWORK]` entries with frameworks, projects, components, hardware, and platforms **you already have**. 3–6 entries, each with a one-sentence description of its core mechanism. The more concrete the description, the better the combinations.
+**2 — Context dimensions (step 2).** Replace `[NAME DIMENSION A]` … `[NAME DIMENSION G]` with your own roles, organisations, and areas of life. The count is not fixed — 4–8 dimensions work well. What matters is *contrast*: pick contexts with genuinely different constraints, stakeholders, and success criteria. The greater the distance between dimensions, the more productive the matrix.
 
-**3 — Notion tags (step 4).** The prompt ships with a domain-neutral list of eight tags and assigns exactly one per top-3 use case; it never invents new ones, and proposes a new tag separately when none fits. Replace the list with the options of your Notion select property so the values match exactly. This block works unconfigured.
+**3 — Cross-inspiration sources (step 3).** Replace the `[NAME PROJEKT / FRAMEWORK]` entries with frameworks, projects, components, hardware, and platforms **you already have**. 3–6 entries, each with a one-sentence description of its core mechanism. The more concrete the description, the better the combinations.
+
+**4 — Notion tags (step 4).** The prompt ships with a domain-neutral list of eight tags and assigns exactly one per top-3 use case; it never invents new ones, and proposes a new tag separately when none fits. Replace the list with the options of your Notion select property so the values match exactly. This block works unconfigured.
 
 The prompt keeps its placeholders on purpose, so the repository stays reusable. Your filled-in version is personal — keep it in your own project rather than committing it back here.
 
