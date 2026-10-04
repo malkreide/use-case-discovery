@@ -1,3 +1,9 @@
+---
+description: Use-Case-Analyse einer Technologiequelle (Repo, Paper, Tool) in fünf Schritten, mit Kreuzinspiration
+argument-hint: <URL | Repo | Paper | lokaler Pfad>
+allowed-tools: WebFetch, Read, Glob, Grep, Bash(git clone:*)
+---
+
 # USE CASE DISCOVERY ENGINE
 
 > Systematischer Prompt für Claude Code zur Entwicklung konkreter Use Cases
@@ -17,12 +23,38 @@ Du analysierst Technologien und entwickelst daraus konkrete, umsetzbare Use Case
 ## INSPIRATIONSQUELLE
 
 ```
-[HIER URL / REPO / PAPER EINFÜGEN]
+$ARGUMENTS
 ```
+
+Ist der Block oben leer, frage nach der Quelle und beginne erst, wenn sie vorliegt.
 
 ---
 
 ## AUFGABE
+
+### Schritt 0: Quelle erfassen (Pflicht)
+
+Lies die Quelle tatsächlich, bevor du analysierst. Analysiere nie aus dem
+Gedächtnis oder allein aus Name und Beschreibung.
+
+- **GitHub-Repo:** README und die zentralen Dateien lesen (WebFetch; bei Bedarf
+  `git clone --depth 1` in ein temporäres Verzeichnis ausserhalb des Arbeitsverzeichnisses).
+- **Paper / Webseite:** Volltext per WebFetch, mindestens Abstract, Methode und Resultate.
+- **Lokaler Pfad oder eingefügter Text:** direkt lesen.
+
+Beginne den Output mit einer Zeile **Quellenstatus** und genau einem dieser Werte:
+
+| Status | Bedeutung | Vorgehen |
+|---|---|---|
+| `vollständig gelesen` | Kerninhalt erfasst | Nenne, was gelesen wurde (z.B. README, `src/`, Paper-Volltext), dann weiter mit Schritt 1 |
+| `teilweise gelesen` | Teile fehlen (Paywall, Umfang, Zugriffslimit) | Nenne, was fehlt und warum, dann weiter mit Schritt 1 |
+| `nicht erreichbar` | Quelle konnte nicht gelesen werden | Nenne die Fehlermeldung und **brich hier ab** |
+
+Bei `nicht erreichbar` keine Analyse aus Vorwissen: Die Schritte 2–5 bauen auf
+Schritt 1 auf, eine erfundene Grundlage entwertet alle Folgeschritte. Bitte
+stattdessen um eine alternative Quelle oder um den eingefügten Text.
+
+---
 
 ### Schritt 1: Tool-Analyse (technisch-neutral)
 
@@ -35,6 +67,9 @@ Analysiere die Quelle gründlich:
 
 Formuliere das Tool in einer **abstrakten, domänenunabhängigen Kurzbeschreibung**
 (1–2 Sätze). Das ist der Schlüssel zur Kombinatorik.
+
+Kennzeichne Aussagen, die nicht direkt in der Quelle stehen, sondern von dir
+erschlossen sind, mit *(Annahme)*.
 
 ---
 
@@ -158,7 +193,27 @@ Für jeden Top-3-Use-Case:
 2. **Problem** — was wird gelöst, für wen?
 3. **Lösung** — wie wird das Tool konkret eingesetzt?
 4. **Nächster Schritt** — erste konkrete Handlung, max. 1 Tag Aufwand
-5. **Notion-Tag** — Kategorie für die Wissensdatenbank
+5. **Notion-Tag** — genau ein Tag aus der Liste unten, wörtlich übernommen
+
+> **⚙️ Anpassungshinweis — Notion-Tags**
+>
+> Die Liste ist eine domänenneutrale Vorgabe und funktioniert ohne Anpassung.
+> Ersetze sie durch die Optionen deiner Notion-Eigenschaft (Select / Multi-Select),
+> damit die Tags exakt übereinstimmen, Schreibweise inklusive.
+> **Empfehlung:** 6–10 Tags. Weniger trennt nicht, mehr wird beliebig.
+
+- `Automatisierung` — wiederkehrende Abläufe ohne manuellen Eingriff
+- `Wissensmanagement` — Wissen erfassen, strukturieren, auffindbar machen
+- `Entscheidungsunterstützung` — Analysen, Bewertungen, Priorisierung
+- `Kommunikation` — Inhalte erstellen, übersetzen, adressatengerecht aufbereiten
+- `Lernen & Bildung` — Lehr-, Lern- und Kompetenzaufbau
+- `Daten & Analyse` — Daten erschliessen, verknüpfen, auswerten
+- `Governance & Compliance` — Regeln, Risiken, Nachvollziehbarkeit
+- `Prototyp & Making` — Hardware, Experimente, technische Erprobung
+
+Erfinde keine neuen Tags. Passt keiner, wähle den nächstliegenden und schlage
+am Ende von Schritt 4 unter **Tag-Vorschlag** einen neuen Tag mit Begründung vor:
+als Vorschlag für die Pflege der Liste, nicht als vergebenen Tag.
 
 ---
 
@@ -177,37 +232,18 @@ keine rhetorischen Fragen, sondern genuine Ungewissheiten.
 | Sprache | Deutsch (Schweizer Rechtschreibung, kein ß) |
 | Ton | Strategisch, präzise, kein Marketingsprech |
 | Länge | So lang wie nötig, so kurz wie möglich |
-| Struktur | Exakt wie oben definiert, Schritte 1–5 |
+| Struktur | Zeile «Quellenstatus», dann exakt Schritte 1–5 wie oben definiert |
 | Technizität | Schritt 1 darf technisch sein; ab Schritt 2 immer Anwenderperspektive |
 
 ---
 
-## VERWENDUNG
-
-### Option A — Interaktiv in Claude Code
-
-```
-/read use-case-discovery.md
-Quelle: https://github.com/[username]/[repo]
-```
-
-### Option B — Als Datei-Argument
-
-```bash
-claude -p use-case-discovery.md
-# Dann auf Nachfrage die URL/Quelle angeben
-```
-
-### Option C — Mit direkter Quellangabe (Bash-Substitution)
-
-```bash
-SOURCE="https://github.com/[username]/[repo]"
-sed "s|\[HIER URL / REPO / PAPER EINFÜGEN\]|$SOURCE|" use-case-discovery.md | claude -p /dev/stdin
-```
-
----
-
 ## HINTERGRUND: DESIGNENTSCHEIDUNGEN
+
+**Warum Schritt 0 mit Quellenstatus?**
+Eine Analyse, die auf einer nicht gelesenen Quelle beruht, sieht genauso
+überzeugend aus wie eine echte. Der Quellenstatus macht sichtbar, worauf die
+Analyse steht, und der Abbruch bei `nicht erreichbar` verhindert, dass eine
+plausible, aber erfundene Kernbeschreibung die ganze Matrix trägt.
 
 **Warum abstrakte Kernbeschreibung in Schritt 1?**
 Die domänenunabhängige Abstraktion ist der Schlüssel zur Kombinatorik. Erst wenn
@@ -224,7 +260,9 @@ erzwungen werden.
 **Warum Top-3 mit "nächster Schritt"?**
 Ohne Handlungsanker bleibt Ideengenerierung akademisch. Der 1-Tages-Constraint
 verhindert Paralyse durch Perfektionismus. Der Notion-Tag sorgt dafür, dass
-jede Idee sofort ins Repository fliesst und nicht verloren geht.
+jede Idee sofort ins Repository fliesst und nicht verloren geht. Die feste
+Tag-Liste verhindert, dass jeder Lauf eigene Kategorien erfindet und die
+Wissensdatenbank zerfasert.
 
 **Warum mehrere Kontextdimensionen?**
 Die Dimensionen repräsentieren reale Rollen und Lebensbereiche mit je eigenen

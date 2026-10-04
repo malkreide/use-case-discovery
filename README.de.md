@@ -20,11 +20,12 @@ Der Prompt wird **unkonfiguriert** ausgeliefert: Kontextdimensionen und Kreuzins
 
 ## Funktionen
 
+- **Quellenprüfung zuerst**: Die Quelle muss tatsächlich gelesen werden; der Output beginnt mit einem Quellenstatus und bricht ab, wenn die Quelle nicht erreichbar ist
 - **5-schrittiger strukturierter Analyseprozess** von technischer Abstraktion bis zu umsetzbaren Top-3-Empfehlungen
 - **Konfigurierbare Kontextdimensionen** (4–8 empfohlen) für die Bereiche, in denen du tatsächlich arbeitest
 - **Kombinatorik-Schritt** erzwingt unerwartete Verbindungen mit deinen eigenen Frameworks, Projekten und Infrastrukturkomponenten
-- **Handlungsorientierter Output** mit Nächsten Schritten (max. 1 Tag Aufwand) und Notion-Tags für das Wissensmanagement
-- **Drei Verwendungsmodi**: interaktiv, Datei-Argument, Bash-Substitution
+- **Handlungsorientierter Output** mit Nächsten Schritten (max. 1 Tag Aufwand) und Notion-Tags aus einer festen, anpassbaren Liste
+- **Claude-Code-Slash-Command**: `/use-case-discovery <Quelle>`, interaktiv oder headless
 
 ---
 
@@ -37,11 +38,13 @@ Der Prompt wird **unkonfiguriert** ausgeliefert: Kontextdimensionen und Kreuzins
 
 ## Konfiguration
 
-Vor der ersten Verwendung füllst du die beiden Platzhalter-Blöcke in `use-case-discovery.md`. Beide sind im Prompt selbst mit einem ⚙️-Hinweis markiert.
+Vor der ersten Verwendung füllst du die beiden Platzhalter-Blöcke in `.claude/commands/use-case-discovery.md` und prüfst die Tag-Liste. Alle drei sind im Prompt selbst mit einem ⚙️-Hinweis markiert.
 
 **1 — Kontextdimensionen (Schritt 2).** Ersetze `[NAME DIMENSION A]` … `[NAME DIMENSION G]` durch deine eigenen Rollen, Organisationen und Lebensbereiche. Die Anzahl ist nicht fix — 4–8 Dimensionen funktionieren gut. Entscheidend ist der *Kontrast*: Wähle Kontexte mit wirklich unterschiedlichen Constraints, Stakeholdern und Erfolgskriterien. Je grösser der Abstand zwischen den Dimensionen, desto fruchtbarer die Matrix.
 
 **2 — Kreuzinspirationsquellen (Schritt 3).** Ersetze die `[NAME PROJEKT / FRAMEWORK]`-Einträge durch Frameworks, Projekte, Komponenten, Hardware und Plattformen, die du **bereits hast**. 3–6 Einträge, je mit einem Satz zum Kernmechanismus. Je konkreter die Beschreibung, desto besser die Kombinationen.
+
+**3 — Notion-Tags (Schritt 4).** Der Prompt liefert eine domänenneutrale Liste mit acht Tags aus und vergibt pro Top-3-Use-Case genau einen davon. Neue Tags erfindet er nicht; passt keiner, schlägt er einen neuen separat vor. Ersetze die Liste durch die Optionen deiner Notion-Select-Eigenschaft, damit die Werte exakt übereinstimmen. Dieser Block funktioniert auch unkonfiguriert.
 
 Der Prompt behält seine Platzhalter bewusst, damit das Repository wiederverwendbar bleibt. Deine ausgefüllte Fassung ist persönlich — halte sie in deinem eigenen Projekt, statt sie hierher zurückzuspielen.
 
@@ -49,26 +52,37 @@ Der Prompt behält seine Platzhalter bewusst, damit das Repository wiederverwend
 
 ## Verwendung / Quickstart
 
-### Option A — Interaktiv in Claude Code
+Der Prompt ist ein [Custom Slash Command für Claude Code](https://code.claude.com/docs/en/slash-commands): Die übergebene Quelle wird über `$ARGUMENTS` eingesetzt.
 
-```
-/read use-case-discovery.md
-Quelle: https://github.com/[username]/[repo]
-```
+### Installation
 
-### Option B — Als Datei-Argument
+Kopiere die Datei in einen der beiden Command-Ordner und konfiguriere sie danach (siehe [Konfiguration](#konfiguration)):
 
 ```bash
-claude -p use-case-discovery.md
-# URL auf Nachfrage eingeben
+# Persönlich: in allen Projekten verfügbar (empfohlen, deine Konfiguration bleibt privat)
+mkdir -p ~/.claude/commands && cp .claude/commands/use-case-discovery.md ~/.claude/commands/
+
+# Projekt: nur in diesem Projekt verfügbar
+mkdir -p /pfad/zum/projekt/.claude/commands && cp .claude/commands/use-case-discovery.md /pfad/zum/projekt/.claude/commands/
 ```
 
-### Option C — Mit direkter Quellangabe (Bash-Substitution)
+In diesem Repository ist der Command direkt verfügbar, praktisch zum Ausprobieren der unkonfigurierten Vorlage.
+
+### Option A — Interaktiv
+
+```
+/use-case-discovery https://github.com/[username]/[repo]
+```
+
+Ohne Argument fragt Claude zuerst nach der Quelle.
+
+### Option B — Headless (Skripte, Stapelverarbeitung)
 
 ```bash
-SOURCE="https://github.com/[username]/[repo]"
-sed "s|\[HIER URL / REPO / PAPER EINFÜGEN\]|$SOURCE|" use-case-discovery.md | claude -p /dev/stdin
+claude -p "/use-case-discovery https://github.com/[username]/[repo]" > analyse.md
 ```
+
+Der Command gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`), damit headless Läufe nicht an Berechtigungsabfragen hängen bleiben.
 
 ---
 
@@ -76,10 +90,11 @@ sed "s|\[HIER URL / REPO / PAPER EINFÜGEN\]|$SOURCE|" use-case-discovery.md | c
 
 | Schritt | Inhalt |
 |---|---|
-| **1 — Tool-Analyse** | Domänenunabhängige Abstraktion des Kernmechanismus |
+| **0 — Quellenprüfung** | Quelle lesen; Status melden: vollständig gelesen, teilweise gelesen oder nicht erreichbar (Abbruch) |
+| **1 — Tool-Analyse** | Domänenunabhängige Abstraktion des Kernmechanismus; Erschlossenes als Annahme markiert |
 | **2 — Use Case Matrix** | Deine konfigurierten Kontextdimensionen, mit gezielten Use Cases pro Dimension |
 | **3 — Kombinatorik** | 2–3 unerwartete Kombinationen mit deinen eigenen Frameworks/Projekten |
-| **4 — Top-3-Empfehlung** | Bewertet nach Impact, Umsetzbarkeit, Neuartigkeit — mit Nächstem Schritt und Notion-Tag |
+| **4 — Top-3-Empfehlung** | Bewertet nach Impact, Umsetzbarkeit, Neuartigkeit — mit Nächstem Schritt und Notion-Tag aus der festen Liste |
 | **5 — Offene Fragen** | 3–5 generative Fragen für weitere Recherche oder Diskussion |
 
 ### Beispielkonfiguration (A–G)
@@ -108,6 +123,9 @@ Der Schlüssel zur Kombinatorik liegt in der Beschreibung ohne vorgesehene Domä
 **Warum mehrere Dimensionen statt einer?**
 Reale Kontexte haben unterschiedliche Constraints, Stakeholder und Erfolgskriterien. Ein in einem Technologiekontext triviales Tool kann in der öffentlichen Verwaltung transformativ sein — und umgekehrt. Unter vier Dimensionen entsteht diese Spannung selten, über acht verwässert sie.
 
+**Warum zuerst die Quelle lesen?**
+Eine Analyse auf einer nie gelesenen Quelle sieht genauso überzeugend aus wie eine echte. Der Quellenstatus zeigt, worauf die Analyse steht, und der Abbruch bei nicht erreichbarer Quelle verhindert, dass eine plausible, aber erfundene Kernbeschreibung die ganze Matrix trägt.
+
 **Warum ein Nächster Schritt von max. 1 Tag?**
 Ohne Handlungsanker bleibt Ideengenerierung akademisch. Der 1-Tages-Constraint verhindert Paralyse durch Perfektionismus und verwandelt Erkenntnisse in Momentum.
 
@@ -117,7 +135,9 @@ Ohne Handlungsanker bleibt Ideengenerierung akademisch. Der 1-Tages-Constraint v
 
 ```
 use-case-discovery/
-├── use-case-discovery.md   ← Haupt-Prompt (ins Projekt kopieren, dann konfigurieren)
+├── .claude/
+│   └── commands/
+│       └── use-case-discovery.md   ← Haupt-Prompt als Slash-Command (kopieren, dann konfigurieren)
 ├── README.md               ← Englische Version
 ├── README.de.md            ← Diese Datei
 ├── CHANGELOG.md            ← Versionsverlauf
