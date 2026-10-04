@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-04
+
+Separates the configuration from the analysis logic and adds an export step.
+
+### Changed
+- **Breaking:** the slash command moved from `.claude/commands/use-case-discovery.md`
+  to the skill folder `.claude/skills/use-case-discovery/` (`SKILL.md`,
+  `profil-laden.sh`, `profil-vorlage.md`). The call stays `/use-case-discovery`.
+  **Upgrading from 2.x:** copy the skill folder to `~/.claude/skills/`, delete the
+  old `~/.claude/commands/use-case-discovery.md` (or the project copy), and move
+  your filled-in role, guardrails, dimensions, cross-inspiration and tags into a
+  profile (see Added).
+- **Breaking:** the personal configuration no longer lives in the prompt. The
+  placeholder slots A–G and the cross-inspiration placeholders are gone; the ⚙️
+  configuration notes moved to `profil-vorlage.md`. `SKILL.md` keeps neutral
+  defaults for role, guardrails, three context dimensions and the tag list.
+- The output's second line now names the profile used ("Profil: …" or
+  "Profil: keines (neutrale Vorgaben)"). It replaces the note "Vorlage nicht
+  konfiguriert"; "Kreuzinspiration nicht konfiguriert" stays.
+- An empty input block now takes the source from the user's request before
+  asking, so the skill also works when Claude invokes it on its own.
+- Steps renumbered to 0–6; the output structure ends with step 6.
+
+### Added
+- Profile: a Markdown file with up to six optional sections (Rolle, Leitplanken,
+  Kontextdimensionen, Kreuzinspiration, Notion-Tags, Notion-Export). A filled-in
+  section replaces the default of the same name; an empty or placeholder-only
+  section keeps it. `profil-laden.sh` loads the first match from
+  `USE_CASE_DISCOVERY_PROFIL` (path, or `keines` to turn it off),
+  `.claude/use-case-discovery/profil.md`, and
+  `~/.claude/use-case-discovery/profil.md`. Only this script is pre-approved,
+  via an exact `Bash(${CLAUDE_SKILL_DIR}/profil-laden.sh)` rule. If loading fails,
+  the output says so and the defaults apply.
+- Step 6a: the top 3 always end the analysis as a YAML block (source, status,
+  date, and per use case name, tag, origin, scores, problem, solution, risks,
+  next step).
+- Step 6b: with `--notion` in the input and a database in the profile, the skill
+  reads the database schema, searches it for each top-3 use case, creates pages
+  only for ideas not yet recorded, and reports each as created, already recorded
+  or not created. It never changes or deletes pages and writes to no other
+  database. Without `--notion`, nothing is written. `notion-search` is
+  pre-approved; `notion-create-pages` deliberately is not.
+- Test case T10 (test profile plus `--notion` without a database) and export
+  block checks in the full-analysis cases. Every test case now runs with
+  `USE_CASE_DISCOVERY_PROFIL` set, so a personal profile never leaks into tests.
+- READMEs: Installation, profile configuration, Notion export, troubleshooting,
+  and two new design-rationale entries.
+
 ## [2.4.0] - 2026-10-04
 
 A fixed set of test sources, so that changes to the prompt can be checked
