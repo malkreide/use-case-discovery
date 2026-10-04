@@ -20,11 +20,12 @@ The prompt ships **unconfigured**: context dimensions and cross-inspiration sour
 
 ## Features
 
+- **Source check first**: the source must actually be read; the output opens with a source status and stops if the source is unreachable
 - **5-step structured analysis** from technical abstraction to actionable top-3 recommendations
 - **Configurable context dimensions** (4–8 recommended) covering whatever roles and domains you operate in
 - **Combinatorics step** forcing unexpected combinations with your own frameworks, projects, and infrastructure
-- **Actionable output** with next steps constrained to 1-day effort and Notion tags for knowledge management
-- **Three usage modes**: interactive, file argument, bash substitution
+- **Actionable output** with next steps constrained to 1-day effort and Notion tags from a fixed, configurable list
+- **Claude Code slash command**: `/use-case-discovery <source>`, interactive or headless
 
 ---
 
@@ -37,11 +38,13 @@ The prompt ships **unconfigured**: context dimensions and cross-inspiration sour
 
 ## Configuration
 
-Before first use, fill in the two placeholder blocks in `use-case-discovery.md`. Both are marked with a ⚙️ note in the prompt itself.
+Before first use, fill in the two placeholder blocks in `.claude/commands/use-case-discovery.md` and check the tag list. All three are marked with a ⚙️ note in the prompt itself.
 
 **1 — Context dimensions (step 2).** Replace `[NAME DIMENSION A]` … `[NAME DIMENSION G]` with your own roles, organisations, and areas of life. The count is not fixed — 4–8 dimensions work well. What matters is *contrast*: pick contexts with genuinely different constraints, stakeholders, and success criteria. The greater the distance between dimensions, the more productive the matrix.
 
 **2 — Cross-inspiration sources (step 3).** Replace the `[NAME PROJEKT / FRAMEWORK]` entries with frameworks, projects, components, hardware, and platforms **you already have**. 3–6 entries, each with a one-sentence description of its core mechanism. The more concrete the description, the better the combinations.
+
+**3 — Notion tags (step 4).** The prompt ships with a domain-neutral list of eight tags and assigns exactly one per top-3 use case; it never invents new ones, and proposes a new tag separately when none fits. Replace the list with the options of your Notion select property so the values match exactly. This block works unconfigured.
 
 The prompt keeps its placeholders on purpose, so the repository stays reusable. Your filled-in version is personal — keep it in your own project rather than committing it back here.
 
@@ -49,26 +52,37 @@ The prompt keeps its placeholders on purpose, so the repository stays reusable. 
 
 ## Usage / Quickstart
 
-### Option A — Interactive in Claude Code
+The prompt is a [Claude Code custom slash command](https://code.claude.com/docs/en/slash-commands): the source you pass is inserted via `$ARGUMENTS`.
 
-```
-/read use-case-discovery.md
-Source: https://github.com/[username]/[repo]
-```
+### Install
 
-### Option B — As file argument
+Copy the file to one of the two command folders, then configure it (see [Configuration](#configuration)):
 
 ```bash
-claude -p use-case-discovery.md
-# Provide the URL when prompted
+# Personal: available in every project (recommended, keeps your configuration private)
+mkdir -p ~/.claude/commands && cp .claude/commands/use-case-discovery.md ~/.claude/commands/
+
+# Project: available only in that project
+mkdir -p /path/to/project/.claude/commands && cp .claude/commands/use-case-discovery.md /path/to/project/.claude/commands/
 ```
 
-### Option C — With direct source substitution (Bash)
+Inside this repository the command is available as-is, which is handy for trying the unconfigured template.
+
+### Option A — Interactive
+
+```
+/use-case-discovery https://github.com/[username]/[repo]
+```
+
+Without an argument, Claude asks for the source first.
+
+### Option B — Headless (scripts, batch runs)
 
 ```bash
-SOURCE="https://github.com/[username]/[repo]"
-sed "s|\[HIER URL / REPO / PAPER EINFÜGEN\]|$SOURCE|" use-case-discovery.md | claude -p /dev/stdin
+claude -p "/use-case-discovery https://github.com/[username]/[repo]" > analysis.md
 ```
+
+The command pre-approves the read-only tools it needs (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`), so headless runs are not blocked by permission prompts.
 
 ---
 
@@ -76,10 +90,11 @@ sed "s|\[HIER URL / REPO / PAPER EINFÜGEN\]|$SOURCE|" use-case-discovery.md | c
 
 | Step | Content |
 |---|---|
-| **1 — Tool Analysis** | Domain-independent abstraction of the core mechanism |
+| **0 — Source Check** | Read the source; report status: fully read, partially read, or unreachable (stop) |
+| **1 — Tool Analysis** | Domain-independent abstraction of the core mechanism; inferences marked as assumptions |
 | **2 — Use Case Matrix** | Your configured context dimensions, with targeted use cases per dimension |
 | **3 — Combinatorics** | 2–3 unexpected combinations with your own frameworks/projects |
-| **4 — Top-3 Recommendation** | Ranked by impact, feasibility, novelty — with next step and Notion tag |
+| **4 — Top-3 Recommendation** | Ranked by impact, feasibility, novelty — with next step and a Notion tag from the fixed list |
 | **5 — Open Questions** | 3–5 generative questions for further research or discussion |
 
 ### Example configuration (A–G)
@@ -108,6 +123,9 @@ The key to combinatorics is describing tools without their intended domain. "A d
 **Why several dimensions instead of one?**
 Real-world contexts have different constraints, stakeholders, and success criteria. A tool trivial in a technology context can be transformative in a public administration one — and vice versa. Fewer than four dimensions rarely produce that tension; more than eight tend to dilute it.
 
+**Why read the source first?**
+An analysis built on a source that was never read looks just as convincing as a real one. The source status shows what the analysis rests on, and stopping when the source is unreachable prevents a plausible but invented core description from carrying the whole matrix.
+
 **Why a 1-day next step?**
 Without an action anchor, idea generation stays academic. The 1-day constraint prevents perfectionism paralysis and turns insight into momentum.
 
@@ -117,7 +135,9 @@ Without an action anchor, idea generation stays academic. The 1-day constraint p
 
 ```
 use-case-discovery/
-├── use-case-discovery.md   ← Main prompt (copy into your project, then configure)
+├── .claude/
+│   └── commands/
+│       └── use-case-discovery.md   ← Main prompt as a slash command (copy, then configure)
 ├── README.md               ← This file
 ├── README.de.md            ← German version
 ├── CHANGELOG.md            ← Version history

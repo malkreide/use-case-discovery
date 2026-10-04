@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Breaking:** the prompt moved from `use-case-discovery.md` to
+  `.claude/commands/use-case-discovery.md` and is now a Claude Code custom slash
+  command (`/use-case-discovery <source>`). The source is passed via `$ARGUMENTS`
+  instead of the `[HIER URL / REPO / PAPER EINFÜGEN]` placeholder; without an argument
+  the prompt asks for the source. Frontmatter pre-approves the read-only tools it
+  needs (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`) so headless runs work.
+- Notion tag in step 4 is now chosen from a fixed, configurable list of eight
+  domain-neutral tags (exactly one per use case). New tags are never invented;
+  when none fits, a new tag is proposed separately.
+
+### Added
+- Step 0 "Quelle erfassen": the source must actually be read before analysis. The
+  output opens with a source status (`vollständig gelesen`, `teilweise gelesen`,
+  `nicht erreichbar`) and stops when the source is unreachable instead of analysing
+  from prior knowledge. Inferred statements in step 1 are marked *(Annahme)*.
+
+### Removed
+- The three documented usage modes (`/read`, `claude -p use-case-discovery.md`,
+  `sed` substitution piped to `claude -p /dev/stdin`). `/read` is not a Claude Code
+  command, and `claude -p <file>` passes the file name rather than its content.
+- The usage section inside the prompt itself; usage is documented in the READMEs.
+
 ### Fixed
 - Corrected the `[1.0.0]` entry below, which described the author's personal
   configuration as though it shipped with the prompt.
