@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.3.0-blue)
+![Version](https://img.shields.io/badge/version-2.4.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -170,6 +170,19 @@ Ohne Handlungsanker bleibt Ideengenerierung akademisch. Der 1-Tages-Constraint v
 
 ---
 
+## Tests
+
+Ein fester Satz von neun Testquellen prüft, ob die Regeln des Prompts im echten Lauf greifen: Quellenstatus, Abbruch bei nicht erreichbaren Quellen, Sekundärquellen, mehrere Themen, Prompt-Injection, Bewertungstabelle und Leitplanken. Die Tests laufen headless gegen die Vorlage in diesem Repository:
+
+```bash
+python3 tests/run_tests.py --offline   # nur lokale Testquellen
+python3 tests/run_tests.py             # alle, inklusive URLs
+```
+
+Fälle, Prüfstufen und Grenzen beschreibt [tests/README.md](tests/README.md). Eine neue Regel im Prompt beginnt mit einem Testfall, der ohne sie scheitert.
+
+---
+
 ## Projektstruktur
 
 ```
@@ -177,6 +190,10 @@ use-case-discovery/
 ├── .claude/
 │   └── commands/
 │       └── use-case-discovery.md   ← Haupt-Prompt als Slash-Command (kopieren, dann konfigurieren)
+├── tests/
+│   ├── fixtures/           ← Lokale Testquellen
+│   ├── run_tests.py        ← Testlauf und Prüfungen
+│   └── README.md           ← Fälle und Vorgehen
 ├── README.md               ← Englische Version
 ├── README.de.md            ← Diese Datei
 ├── CHANGELOG.md            ← Versionsverlauf
