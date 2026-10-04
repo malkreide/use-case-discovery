@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-10-04
+
+A fixed set of test sources, so that changes to the prompt can be checked
+against real runs instead of a single example. The prompt itself is unchanged.
+
+### Added
+- `tests/run_tests.py`: runs `/use-case-discovery` headless against nine test
+  cases and checks the output with regular expressions. "muss" checks fail the
+  run, "soll" checks only warn. Options: `--offline` (local sources only),
+  `--case`, `--check-only` (re-check saved outputs without new runs), `--jobs`,
+  `--timeout`. Python standard library only.
+- Nine cases: a complete local source, this repository on GitHub, an
+  unreachable `.invalid` URL, a video without transcript, a paywalled article,
+  a newsletter copy with two topics and no link to the original, a list without
+  a main topic, a prompt injection hidden in an HTML comment, and a tool whose
+  core violates the guardrails. The six local sources in `tests/fixtures/`
+  describe invented tools, so the model cannot fill gaps from memory.
+- `tests/README.md` (German): cases, check levels, limits, and the rule that a
+  new prompt rule starts with a test case that fails without it.
+- "Tests" section and updated project structure in both READMEs; `.gitignore`
+  for `tests/output/` and Python bytecode.
+
 ## [2.3.0] - 2026-10-04
 
 Makes the top-3 selection traceable and risk-aware, and closes gaps that let the

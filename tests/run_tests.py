@@ -73,9 +73,12 @@ def absent(pattern: str, description: str, level: str = MUSS) -> Check:
     return Check(level, description, "absent", pattern)
 
 
-# Überschrift oder fett gesetzte Zeile, die einen Schritt einleitet
+# Markdown-Überschrift oder vollständig fett gesetzte Zeile, die einen Schritt
+# einleitet. Ein Absatz mit fettem Vorspann («**Hinweis:** … Schritt 2 …») zählt nicht.
 def _step(expr: str) -> str:
-    return r"(?im)^\s*(#{1,6}\s*|\*\*)[^\n]*(" + expr + r")"
+    heading = r"^[ \t]*#{1,6}[ \t][^\n]*(?:" + expr + r")"
+    bold_line = r"^[ \t]*\*\*[^*\n]*(?:" + expr + r")[^*\n]*\*\*[ \t]*$"
+    return r"(?im)" + heading + "|" + bold_line
 
 
 MATRIX = _step(r"Schritt\s*2\b|Use[ -]?Case[ -]?Matrix")
