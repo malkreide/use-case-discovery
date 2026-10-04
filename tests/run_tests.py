@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Testquellen für /use-case-discovery.
 
-Führt den Slash-Command headless gegen einen festen Satz von Testquellen aus
-und prüft die Ausgabe gegen erwartete Verhaltensweisen. Prüft die Vorlage in
-diesem Repository, nicht eine persönlich konfigurierte Kopie.
+Führt den Skill headless gegen einen festen Satz von Testquellen aus und prüft
+die Ausgabe gegen erwartete Verhaltensweisen. Prüft den Skill in diesem
+Repository. Ein persönliches Profil wird nie geladen: Jeder Fall läuft ohne
+Profil oder mit dem Testprofil aus tests/fixtures/.
 
     python3 tests/run_tests.py                 # alle Fälle
     python3 tests/run_tests.py --offline       # nur lokale Testquellen
@@ -85,6 +86,9 @@ MATRIX = _step(r"Schritt\s*2\b|Use[ -]?Case[ -]?Matrix")
 STEP_5 = _step(r"Schritt\s*5\b|Offene Fragen")
 SCORE_TABLE = r"(?im)^\|\s*\**Use[ -]?Case\**\s*\|\s*\**Herkunft"
 RISKS = r"Risiken\s*(&|und)\s*Voraussetzungen"
+EXPORT_BLOCK = r"```ya?ml\s*\n[\s\S]*?use_cases:[\s\S]*?```"
+EXPORT_ENTRY = r"(?m)^\s*-\s*name:"
+NO_PROFILE = r"(?i)Profil:?\**:?\s*`?keines"
 
 NO_SHARP_S = absent("ß", "Kein «ß» (Schweizer Rechtschreibung)")
 
@@ -93,10 +97,20 @@ FULL_ANALYSIS = [
     contains(STEP_5, "Schritt 5 vorhanden"),
     contains(SCORE_TABLE, "Bewertungstabelle vor den Top-3"),
     Check(MUSS, "«Risiken & Voraussetzungen» bei allen Top-3", "count", RISKS, minimum=3),
-    contains(r"Vorlage nicht konfiguriert", "Hinweis auf neutrale Ersatzdimensionen"),
-    contains(r"Kreuzinspiration nicht konfiguriert", "Hinweis auf fehlende Kreuzinspiration"),
+    contains(EXPORT_BLOCK, "Export-Block (YAML) mit use_cases"),
+    Check(MUSS, "Export-Block mit drei Use Cases", "count", EXPORT_ENTRY, minimum=3),
     NO_SHARP_S,
 ]
+
+WITHOUT_PROFILE = [
+    contains(NO_PROFILE, "Profilzeile meldet «keines»"),
+    contains(r"Kreuzinspiration nicht konfiguriert", "Hinweis auf fehlende Kreuzinspiration"),
+]
+
+DEFAULT_TAGS = (
+    "Automatisierung|Wissensmanagement|Entscheidungsunterstützung|Kommunikation|"
+    "Lernen & Bildung|Daten & Analyse|Governance & Compliance|Prototyp & Making"
+)
 
 ABORTED = [
     absent(MATRIX, "Keine Use-Case-Matrix (Abbruch)"),
@@ -112,6 +126,7 @@ class Case:
     source: str
     checks: list[Check]
     network: bool = False
+    profile: str | None = None  # Pfad relativ zum Repository, sonst ohne Profil
 
 
 CASES = [
@@ -119,13 +134,13 @@ CASES = [
         "T01",
         "Vollständige lokale Quelle",
         f"{FIXTURES}/werkzeug.md",
-        [status("vollständig gelesen"), *FULL_ANALYSIS],
+        [status("vollständig gelesen"), *FULL_ANALYSIS, *WITHOUT_PROFILE],
     ),
     Case(
         "T02",
         "GitHub-Repo",
         "https://github.com/malkreide/use-case-discovery",
-        [status("vollständig gelesen"), *FULL_ANALYSIS],
+        [status("vollständig gelesen"), *FULL_ANALYSIS, *WITHOUT_PROFILE],
         network=True,
     ),
     Case(
@@ -209,14 +224,41 @@ CASES = [
             NO_SHARP_S,
         ],
     ),
+    Case(
+        "T10",
+        "Profil ohne Notion-Datenbank, mit --notion",
+        f"{FIXTURES}/werkzeug.md --notion",
+        [
+            status("vollständig gelesen"),
+            *FULL_ANALYSIS,
+            contains(r"Profil:?\**:?\s*`?[^\n]*profil-beispiel\.md", "Profilzeile nennt das Testprofil"),
+            contains(r"Musikschule Seefeld", "Dimension M1 aus dem Profil"),
+            contains(r"Quartierverein Riesbach", "Dimension M2 aus dem Profil"),
+            contains(r"Notenkeller|Probenbot", "Kreuzinspiration aus dem Profil"),
+            absent(r"Kreuzinspiration nicht konfiguriert", "Kein Ersatz für die Kreuzinspiration"),
+            Check(
+                MUSS,
+                "Export-Block verwendet nur Tags aus dem Profil",
+                "count",
+                r"(?m)^\s*tag:\s*[\"'`]?(Sekretariat|Unterricht|Gemeinschaft)",
+                minimum=3,
+            ),
+            absent(r"(?m)^\s*tag:\s*[\"'`]?(" + DEFAULT_TAGS + ")", "Keine Vorgabe-Tags im Export-Block"),
+            contains(r"(?i)Notion-Export:?\**:?\s*nicht ausgeführt", "Meldet, dass der Notion-Export nicht ausgeführt wurde"),
+        ],
+        profile=f"{FIXTURES}/profil-beispiel.md",
+    ),
 ]
 
 
 def run_claude(case: Case, timeout: int) -> str:
     claude = os.environ.get("CLAUDE_BIN", "claude")
+    env = dict(os.environ, USE_CASE_DISCOVERY_PROFIL=case.profile or "keines")
     result = subprocess.run(
         [claude, "-p", f"/use-case-discovery {case.source}"],
         cwd=ROOT,
+        env=env,
+        stdin=subprocess.DEVNULL,
         capture_output=True,
         text=True,
         timeout=timeout,

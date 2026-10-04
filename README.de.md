@@ -1,10 +1,10 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.4.0-blue)
+![Version](https://img.shields.io/badge/version-3.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
-> Ein strukturierter Claude Code Prompt zur systematischen Entwicklung von Use Cases aus GitHub Repos, Papers und anderen technologischen Quellen — mit kombinatorischer Kreuzinspiration über die beruflichen und privaten Kontexte, die du selbst konfigurierst.
+> Ein strukturierter Claude-Code-Skill zur systematischen Entwicklung von Use Cases aus GitHub Repos, Papers und anderen technologischen Quellen — mit kombinatorischer Kreuzinspiration über die beruflichen und privaten Kontexte, die du selbst konfigurierst.
 
 [🇬🇧 English Version](README.md)
 
@@ -12,9 +12,9 @@
 
 ## Übersicht
 
-`use-case-discovery` ist ein Prompt-Template für **Claude Code**, das aus einem beliebigen GitHub Repository, Forschungspaper oder Technologie-Tool eine strukturierte Use-Case-Analyse macht. Es fragt nicht einfach «Was kann das?» — sondern erzwingt zuerst eine domänenunabhängige Abstraktion, kartiert dann potenzielle Anwendungen über mehrere unterschiedliche Kontextdimensionen und generiert abschliessend unerwartete Kombinationen durch gezielte Kreuzbestäubung mit deinen eigenen Frameworks und Projekten.
+`use-case-discovery` ist ein **Claude-Code-Skill**, der aus einem beliebigen GitHub Repository, Forschungspaper oder Technologie-Tool eine strukturierte Use-Case-Analyse macht. Es fragt nicht einfach «Was kann das?» — sondern erzwingt zuerst eine domänenunabhängige Abstraktion, kartiert dann potenzielle Anwendungen über mehrere unterschiedliche Kontextdimensionen und generiert abschliessend unerwartete Kombinationen durch gezielte Kreuzbestäubung mit deinen eigenen Frameworks und Projekten.
 
-Der Prompt wird **unkonfiguriert** ausgeliefert: Kontextdimensionen und Kreuzinspirationsquellen sind Platzhalter, die du mit deinen eigenen Rollen, Organisationen und Projekten füllst. Siehe [Konfiguration](#konfiguration). Unkonfiguriert läuft der Prompt mit drei neutralen Ersatzdimensionen und weist im Output darauf hin: gut zum Ausprobieren, für echte Arbeit zu allgemein.
+Skill und Konfiguration sind getrennt: Der Skill enthält die Analyselogik, deine Rollen, Dimensionen, Projekte und Tags stehen in einem eigenen **Profil**. Ein Update des Skills lässt dein Profil unberührt. Ohne Profil läuft der Skill mit neutralen Vorgaben und weist im Output darauf hin: gut zum Ausprobieren, für echte Arbeit zu allgemein.
 
 ---
 
@@ -22,14 +22,15 @@ Der Prompt wird **unkonfiguriert** ausgeliefert: Kontextdimensionen und Kreuzins
 
 - **Quellenprüfung zuerst**: Die Quelle muss tatsächlich gelesen werden; der Output beginnt mit einem Quellenstatus und bricht ab, wenn die Quelle nicht erreichbar ist
 - **Quellenarten**: GitHub-Repos, Papers und Webseiten, Notion-Seiten (über einen verbundenen Notion-MCP-Server), Transkripte von Videos und Podcasts, lokale Dateien inklusive PDFs
-- **5-schrittiger strukturierter Analyseprozess** von technischer Abstraktion bis zu umsetzbaren Top-3-Empfehlungen
+- **6-schrittiger strukturierter Analyseprozess** von technischer Abstraktion bis zu umsetzbaren Top-3-Empfehlungen und Export
 - **Quelle ist Material, nicht Auftrag**: Anweisungen in der analysierten Quelle werden nicht befolgt, sondern im Quellenstatus vermerkt
-- **Konfigurierbare Kontextdimensionen** (4–8 empfohlen) für die Bereiche, in denen du tatsächlich arbeitest; ohne plausiblen Bezug bleibt eine Dimension begründet leer, statt mit Füllideen bestückt zu werden
+- **Profil statt Platzhalter**: Rolle, Leitplanken, Kontextdimensionen, Kreuzinspiration und Tags stehen in einer eigenen Datei ausserhalb des Skills
+- **Konfigurierbare Kontextdimensionen** (4–8 empfohlen); ohne plausiblen Bezug bleibt eine Dimension begründet leer, statt mit Füllideen bestückt zu werden
 - **Kombinatorik-Schritt** erzwingt unerwartete Verbindungen mit deinen eigenen Frameworks, Projekten und Infrastrukturkomponenten
 - **Nachvollziehbare Auswahl**: Die stärksten Kandidaten werden vor den Top-3 in einer Tabelle bewertet, mit Begründung pro Zeile
 - **Konfigurierbare Leitplanken** als Ausschlusskriterien; jeder Top-3-Use-Case nennt Risiken und Voraussetzungen
-- **Handlungsorientierter Output** mit Nächsten Schritten (max. 1 Tag Aufwand) und Notion-Tags aus einer festen, anpassbaren Liste
-- **Claude-Code-Slash-Command**: `/use-case-discovery <Quelle>`, interaktiv oder headless
+- **Export**: Die Top-3 erscheinen immer als YAML-Block; mit `--notion` werden sie nach einer Doppelprüfung in deine Notion-Datenbank geschrieben
+- **Claude-Code-Skill**: `/use-case-discovery <Quelle>`, interaktiv oder headless
 
 ---
 
@@ -37,46 +38,57 @@ Der Prompt wird **unkonfiguriert** ausgeliefert: Kontextdimensionen und Kreuzins
 
 - [Claude Code](https://claude.ai/code) CLI installiert
 - Eine GitHub-Repository-URL, ein Paper-Link oder eine Tool-Beschreibung als Input
+- Für Notion-Quellen und den Notion-Export: ein verbundener Notion-MCP-Server
 
 ---
 
-## Konfiguration
+## Installation
 
-Vor der ersten Verwendung füllst du die beiden Platzhalter-Blöcke in `.claude/commands/use-case-discovery.md` und prüfst Rolle, Leitplanken und Tag-Liste. Alle fünf sind im Prompt selbst mit einem ⚙️-Hinweis markiert.
-
-**1 — Rolle.** Drei Felder legen fest, aus welcher Perspektive die Analyse geschrieben wird: *Rolle* (der Blickwinkel, aus dem Ideen beurteilt werden), *Expertise* (2–4 Fachgebiete, idealerweise passend zu deinen Dimensionen aus Schritt 2) und *Haltung* (wie kritisch, risikobewusst oder experimentierfreudig bewertet wird). Die ausgelieferte Vorgabe ist domänenneutral und funktioniert auch unkonfiguriert. Zur Illustration die frühere Fassung des Autors: strategischer Innovationsberater mit Expertise in KI-Anwendungen, Bildung, öffentlicher Verwaltung und technologischer Produktentwicklung.
-
-**2 — Leitplanken.** Ausschlusskriterien, die in deinem Umfeld gelten: Ein Use Case, der eine davon verletzt, kommt nicht in die Top-3. In Schritt 2 und 3 darf er erscheinen, wenn die Bedingung genannt wird, unter der er die Leitplanke einhielte. Die Vorgabe ist domänenneutral (besonders schützenswerte Personendaten, automatisierte Entscheide über Personen, Lizenz der Quelle) und funktioniert auch unkonfiguriert. Empfohlen sind 3–6 prüfbare Ausschlüsse («Keine …»). Im Umfeld des Autors wären das z.B. das Informations- und Datenschutzgesetz des Kantons Zürich (IDG), die städtischen Vorgaben zum KI-Einsatz und der Schutz von Daten von Schülerinnen und Schülern.
-
-**3 — Kontextdimensionen (Schritt 2).** Ersetze `[NAME DIMENSION A]` … `[NAME DIMENSION G]` durch deine eigenen Rollen, Organisationen und Lebensbereiche. Die Anzahl ist nicht fix — 4–8 Dimensionen funktionieren gut. Entscheidend ist der *Kontrast*: Wähle Kontexte mit wirklich unterschiedlichen Constraints, Stakeholdern und Erfolgskriterien. Je grösser der Abstand zwischen den Dimensionen, desto fruchtbarer die Matrix.
-
-**4 — Kreuzinspirationsquellen (Schritt 3).** Ersetze die `[NAME PROJEKT / FRAMEWORK]`-Einträge durch Frameworks, Projekte, Komponenten, Hardware und Plattformen, die du **bereits hast**. 3–6 Einträge, je mit einem Satz zum Kernmechanismus. Je konkreter die Beschreibung, desto besser die Kombinationen.
-
-**5 — Notion-Tags (Schritt 4).** Der Prompt liefert eine domänenneutrale Liste mit acht Tags aus und vergibt pro Top-3-Use-Case genau einen davon. Neue Tags erfindet er nicht; passt keiner, schlägt er einen neuen separat vor. Ersetze die Liste durch die Optionen deiner Notion-Select-Eigenschaft, damit die Werte exakt übereinstimmen. Dieser Block funktioniert auch unkonfiguriert.
-
-Der Prompt behält seine Platzhalter bewusst, damit das Repository wiederverwendbar bleibt. Deine ausgefüllte Fassung ist persönlich — halte sie in deinem eigenen Projekt, statt sie hierher zurückzuspielen.
-
----
-
-## Verwendung / Quickstart
-
-Der Prompt ist ein [Custom Slash Command für Claude Code](https://code.claude.com/docs/en/slash-commands): Die übergebene Quelle wird über `$ARGUMENTS` eingesetzt.
-
-### Installation
-
-Kopiere die Datei in einen der beiden Command-Ordner und konfiguriere sie danach (siehe [Konfiguration](#konfiguration)):
+Der Skill ist ein Ordner mit drei Dateien. Kopiere ihn in deinen persönlichen Skill-Ordner (in allen Projekten verfügbar) und lege dein Profil an:
 
 ```bash
-# Persönlich: in allen Projekten verfügbar (empfohlen, deine Konfiguration bleibt privat)
-mkdir -p ~/.claude/commands && cp .claude/commands/use-case-discovery.md ~/.claude/commands/
-
-# Projekt: nur in diesem Projekt verfügbar
-mkdir -p /pfad/zum/projekt/.claude/commands && cp .claude/commands/use-case-discovery.md /pfad/zum/projekt/.claude/commands/
+mkdir -p ~/.claude/skills && cp -r .claude/skills/use-case-discovery ~/.claude/skills/
+mkdir -p ~/.claude/use-case-discovery
+cp .claude/skills/use-case-discovery/profil-vorlage.md ~/.claude/use-case-discovery/profil.md
 ```
 
-In diesem Repository ist der Command direkt verfügbar, praktisch zum Ausprobieren der unkonfigurierten Vorlage. Sie arbeitet mit neutralen Ersatzdimensionen und vermerkt das im Output.
+Für ein einzelnes Projekt kopierst du den Ordner stattdessen nach `/pfad/zum/projekt/.claude/skills/`. In diesem Repository ist der Skill direkt verfügbar, praktisch zum Ausprobieren ohne Profil.
 
-### Option A — Interaktiv
+**Update:** Nur den Skill-Ordner erneut kopieren. Das Profil liegt ausserhalb und bleibt unverändert.
+
+**Umstieg von 2.x:** Lösche `~/.claude/commands/use-case-discovery.md` (bzw. die Kopie im Projekt), sonst gibt es den Befehl doppelt. Übertrage deine ausgefüllten Abschnitte (Rolle, Leitplanken, Dimensionen, Kreuzinspiration, Tags) in die gleichnamigen Abschnitte von `profil.md`; die Vorlage zeigt das Format.
+
+---
+
+## Konfiguration: das Profil
+
+Das Profil ist eine Markdown-Datei mit bis zu sechs Abschnitten. Jeder ist optional: Ein ausgefüllter Abschnitt ersetzt die gleichnamige Vorgabe des Skills vollständig, ein fehlender lässt sie gelten. Einträge mit Platzhaltern in eckigen Klammern werden ignoriert. Die Vorlage [`profil-vorlage.md`](.claude/skills/use-case-discovery/profil-vorlage.md) erklärt jeden Abschnitt.
+
+Der Skill sucht das Profil an drei Orten, der erste Treffer gilt:
+
+1. Pfad in der Umgebungsvariable `USE_CASE_DISCOVERY_PROFIL` (der Wert `keines` schaltet das Profil ab)
+2. `.claude/use-case-discovery/profil.md` im aktuellen Projekt
+3. `~/.claude/use-case-discovery/profil.md`
+
+Die zweite Zeile des Outputs nennt, welches Profil verwendet wurde.
+
+**1 — Rolle.** Drei Felder legen fest, aus welcher Perspektive die Analyse geschrieben wird: *Rolle* (der Blickwinkel, aus dem Ideen beurteilt werden), *Expertise* (2–4 Fachgebiete, idealerweise passend zu deinen Dimensionen) und *Haltung* (wie kritisch, risikobewusst oder experimentierfreudig bewertet wird). Zur Illustration die frühere Fassung des Autors: strategischer Innovationsberater mit Expertise in KI-Anwendungen, Bildung, öffentlicher Verwaltung und technologischer Produktentwicklung.
+
+**2 — Leitplanken.** Ausschlusskriterien, die in deinem Umfeld gelten: Ein Use Case, der eine davon verletzt, kommt nicht in die Top-3. Die Vorgabe ist domänenneutral (besonders schützenswerte Personendaten, automatisierte Entscheide über Personen, Lizenz der Quelle); die Vorlage enthält sie bereits, damit sie beim Ersetzen nicht verloren gehen. Empfohlen sind 3–6 prüfbare Ausschlüsse («Keine …»). Im Umfeld des Autors wären das z.B. das Informations- und Datenschutzgesetz des Kantons Zürich (IDG), die städtischen Vorgaben zum KI-Einsatz und der Schutz von Daten von Schülerinnen und Schülern.
+
+**3 — Kontextdimensionen.** Deine Rollen, Organisationen und Lebensbereiche, 4–8 Stück. Entscheidend ist der *Kontrast*: Wähle Kontexte mit wirklich unterschiedlichen Constraints, Stakeholdern und Erfolgskriterien.
+
+**4 — Kreuzinspiration.** Frameworks, Projekte, Komponenten, Hardware und Plattformen, die du **bereits hast**. 3–6 Einträge, je mit einem Satz zum Kernmechanismus.
+
+**5 — Notion-Tags.** Die Optionen deiner Notion-Select-Eigenschaft, exakt in derselben Schreibweise. Pro Top-3-Use-Case wird genau ein Tag vergeben; neue Tags werden nie erfunden, sondern separat vorgeschlagen.
+
+**6 — Notion-Export.** Link zur Notion-Datenbank und welche Eigenschaft welchen Wert aufnimmt. Nur nötig für `--notion`.
+
+---
+
+## Verwendung
+
+### Interaktiv
 
 ```
 /use-case-discovery https://github.com/[username]/[repo]
@@ -84,13 +96,27 @@ In diesem Repository ist der Command direkt verfügbar, praktisch zum Ausprobier
 
 Ohne Argument fragt Claude zuerst nach der Quelle.
 
-### Option B — Headless (Skripte, Stapelverarbeitung)
+### Headless (Skripte, Stapelverarbeitung)
 
 ```bash
 claude -p "/use-case-discovery https://github.com/[username]/[repo]" > analyse.md
 ```
 
-Der Command gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`, Notion-Fetch), damit headless Läufe nicht an Berechtigungsabfragen hängen bleiben.
+Der Skill gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`, Notion-Fetch und -Suche) sowie das Skript, das dein Profil lädt. Headless Läufe bleiben so nicht an Berechtigungsabfragen hängen.
+
+### Notion-Export
+
+```
+/use-case-discovery https://github.com/[username]/[repo] --notion
+```
+
+Mit `--notion` und einer Datenbank im Profil liest der Skill zuerst die Datenbank, sucht für jeden Top-3-Use-Case nach bestehenden Einträgen und legt nur neue Ideen an. Bestehende Seiten werden nie geändert oder gelöscht. Ohne `--notion` schreibt der Skill nichts nach Notion; der YAML-Block am Ende jeder Analyse bleibt die Ablage.
+
+Das Schreiben (`notion-create-pages`) ist bewusst **nicht** vorab freigegeben: Interaktiv bestätigst du jede Schreibaktion. Für headless Läufe gibst du sie ausdrücklich frei:
+
+```bash
+claude -p "/use-case-discovery <Quelle> --notion" --allowedTools "mcp__notion__notion-create-pages"
+```
 
 ### Quellenarten
 
@@ -112,7 +138,11 @@ Der Command gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`,
 /use-case-discovery https://app.notion.com/p/… Thema: GitHub-Chatbot
 ```
 
-**Name des Notion-Werkzeugs.** `allowed-tools` gibt `mcp__Notion__notion-fetch` und `mcp__notion__notion-fetch` frei, also die Namen, die ein Notion-Server unter der Bezeichnung `Notion` oder `notion` erhält. Heisst dein Server anders (prüfen mit `claude mcp list`), passe den Eintrag auf `mcp__<server-name>__notion-fetch` an. Sonst fragt Claude bei jedem Lauf nach der Berechtigung, und headless Läufe können Notion nicht lesen.
+**Name des Notion-Werkzeugs.** `allowed-tools` gibt `notion-fetch` und `notion-search` unter den Präfixen `mcp__Notion__` und `mcp__notion__` frei, also für einen Notion-Server namens `Notion` oder `notion`. Heisst dein Server anders (prüfen mit `claude mcp list`), passe die Einträge in `SKILL.md` an. Sonst fragt Claude bei jedem Lauf nach der Berechtigung, und headless Läufe können Notion nicht lesen.
+
+### Fehlerbehebung
+
+**Die Profilzeile meldet, dass kein Profil geladen werden konnte.** Prüfe, ob `profil-laden.sh` im Skill-Ordner ausführbar ist (`chmod +x ~/.claude/skills/use-case-discovery/profil-laden.sh`). Beim Kopieren aus einem ZIP-Archiv geht das Ausführungsrecht verloren.
 
 ---
 
@@ -120,16 +150,17 @@ Der Command gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`,
 
 | Schritt | Inhalt |
 |---|---|
-| **0 — Quellenprüfung** | Quelle lesen; Status melden: vollständig gelesen, teilweise gelesen oder nicht erreichbar (Abbruch) |
+| **0 — Quellenprüfung** | Quelle lesen; Status melden: vollständig gelesen, teilweise gelesen oder nicht erreichbar (Abbruch); danach die Profilzeile |
 | **1 — Tool-Analyse** | Domänenunabhängige Abstraktion des Kernmechanismus; Erschlossenes als Annahme markiert |
-| **2 — Use Case Matrix** | Deine konfigurierten Kontextdimensionen, mit gezielten Use Cases pro Dimension; ohne plausiblen Bezug begründet leer |
+| **2 — Use Case Matrix** | Deine Kontextdimensionen aus dem Profil, mit gezielten Use Cases pro Dimension; ohne plausiblen Bezug begründet leer |
 | **3 — Kombinatorik** | 2–3 unerwartete Kombinationen mit deinen eigenen Frameworks/Projekten |
-| **4 — Top-3-Empfehlung** | Bewertungstabelle der 5–8 stärksten Kandidaten (Impact, Umsetzbarkeit, Neuartigkeit; 1–3), Ausschluss bei verletzter Leitplanke; Top-3 mit Risiken & Voraussetzungen, Nächstem Schritt und Notion-Tag aus der festen Liste |
+| **4 — Top-3-Empfehlung** | Bewertungstabelle der 5–8 stärksten Kandidaten (Impact, Umsetzbarkeit, Neuartigkeit; 1–3), Ausschluss bei verletzter Leitplanke; Top-3 mit Risiken & Voraussetzungen, Nächstem Schritt und Notion-Tag |
 | **5 — Offene Fragen** | 3–5 generative Fragen für weitere Recherche oder Diskussion |
+| **6 — Export** | Top-3 als YAML-Block; mit `--notion` Doppelprüfung und Ablage in der Notion-Datenbank |
 
-### Beispielkonfiguration (A–G)
+### Beispiel: Kontextdimensionen im Profil
 
-Der Prompt liefert sieben leere Slots A–G aus. Die folgende Belegung ist die Konfiguration des Autors — eine Illustration der *Art* von Kontrast, die die Matrix zum Laufen bringt, keine zu übernehmende Vorgabe:
+Die folgende Belegung ist die Konfiguration des Autors — eine Illustration der *Art* von Kontrast, die die Matrix zum Laufen bringt, keine zu übernehmende Vorgabe:
 
 | Dim | Bereich |
 |---|---|
@@ -168,18 +199,24 @@ Eine kritische Haltung allein verhindert nicht, dass eine eindrückliche, aber u
 **Warum ein Nächster Schritt von max. 1 Tag?**
 Ohne Handlungsanker bleibt Ideengenerierung akademisch. Der 1-Tages-Constraint verhindert Paralyse durch Perfektionismus und verwandelt Erkenntnisse in Momentum.
 
+**Warum ein Profil statt ausgefüllter Platzhalter?**
+Solange die persönliche Konfiguration in derselben Datei steht wie die Analyselogik, heisst jedes Update: neu kopieren und von Hand übertragen. Mit getrenntem Profil wird ein Update zum Austausch eines Ordners, und das Repository bleibt frei von persönlichen Angaben.
+
+**Warum Notion nur mit `--notion`?**
+Schreiben in eine geteilte Datenbank ist eine Handlung mit Aussenwirkung. Sie soll bewusst ausgelöst werden, nicht als Nebeneffekt jeder Analyse. Die Doppelprüfung hält die Datenbank sauber und zeigt nebenbei, welche Ideen im eigenen Bestand schon existieren.
+
 ---
 
 ## Tests
 
-Ein fester Satz von neun Testquellen prüft, ob die Regeln des Prompts im echten Lauf greifen: Quellenstatus, Abbruch bei nicht erreichbaren Quellen, Sekundärquellen, mehrere Themen, Prompt-Injection, Bewertungstabelle und Leitplanken. Die Tests laufen headless gegen die Vorlage in diesem Repository:
+Ein fester Satz von zehn Testquellen prüft, ob die Regeln des Skills im echten Lauf greifen: Quellenstatus, Abbruch bei nicht erreichbaren Quellen, Sekundärquellen, mehrere Themen, Prompt-Injection, Bewertungstabelle, Leitplanken, Profil und Export-Block. Die Tests laufen headless gegen den Skill in diesem Repository und laden nie dein persönliches Profil:
 
 ```bash
 python3 tests/run_tests.py --offline   # nur lokale Testquellen
 python3 tests/run_tests.py             # alle, inklusive URLs
 ```
 
-Fälle, Prüfstufen und Grenzen beschreibt [tests/README.md](tests/README.md). Eine neue Regel im Prompt beginnt mit einem Testfall, der ohne sie scheitert.
+Fälle, Prüfstufen und Grenzen beschreibt [tests/README.md](tests/README.md). Eine neue Regel im Skill beginnt mit einem Testfall, der ohne sie scheitert.
 
 ---
 
@@ -188,8 +225,11 @@ Fälle, Prüfstufen und Grenzen beschreibt [tests/README.md](tests/README.md). E
 ```
 use-case-discovery/
 ├── .claude/
-│   └── commands/
-│       └── use-case-discovery.md   ← Haupt-Prompt als Slash-Command (kopieren, dann konfigurieren)
+│   └── skills/
+│       └── use-case-discovery/     ← Der Skill (ganzen Ordner kopieren)
+│           ├── SKILL.md            ← Analyselogik und Vorgaben
+│           ├── profil-laden.sh     ← Lädt dein Profil
+│           └── profil-vorlage.md   ← Vorlage für dein Profil
 ├── tests/
 │   ├── fixtures/           ← Lokale Testquellen
 │   ├── run_tests.py        ← Testlauf und Prüfungen
