@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.3.0-blue)
+![Version](https://img.shields.io/badge/version-2.4.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -170,6 +170,19 @@ Without an action anchor, idea generation stays academic. The 1-day constraint p
 
 ---
 
+## Tests
+
+A fixed set of nine test sources checks whether the prompt's rules hold in a real run: source status, stopping on unreachable sources, secondary sources, multiple topics, prompt injection, the scoring table and guardrails. The tests run headless against the template in this repository:
+
+```bash
+python3 tests/run_tests.py --offline   # local test sources only
+python3 tests/run_tests.py             # all, including URLs
+```
+
+Cases, check levels and limits are described in [tests/README.md](tests/README.md) (German). A new rule in the prompt starts with a test case that fails without it.
+
+---
+
 ## Project Structure
 
 ```
@@ -177,6 +190,10 @@ use-case-discovery/
 ├── .claude/
 │   └── commands/
 │       └── use-case-discovery.md   ← Main prompt as a slash command (copy, then configure)
+├── tests/
+│   ├── fixtures/           ← Local test sources
+│   ├── run_tests.py        ← Test run and checks
+│   └── README.md           ← Cases and procedure (German)
 ├── README.md               ← This file
 ├── README.de.md            ← German version
 ├── CHANGELOG.md            ← Version history
