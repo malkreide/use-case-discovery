@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.1.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -21,6 +21,7 @@ Der Prompt wird **unkonfiguriert** ausgeliefert: Kontextdimensionen und Kreuzins
 ## Funktionen
 
 - **Quellenprüfung zuerst**: Die Quelle muss tatsächlich gelesen werden; der Output beginnt mit einem Quellenstatus und bricht ab, wenn die Quelle nicht erreichbar ist
+- **Quellenarten**: GitHub-Repos, Papers und Webseiten, Notion-Seiten (über einen verbundenen Notion-MCP-Server), Transkripte von Videos und Podcasts, lokale Dateien inklusive PDFs
 - **5-schrittiger strukturierter Analyseprozess** von technischer Abstraktion bis zu umsetzbaren Top-3-Empfehlungen
 - **Konfigurierbare Kontextdimensionen** (4–8 empfohlen) für die Bereiche, in denen du tatsächlich arbeitest
 - **Kombinatorik-Schritt** erzwingt unerwartete Verbindungen mit deinen eigenen Frameworks, Projekten und Infrastrukturkomponenten
@@ -84,7 +85,23 @@ Ohne Argument fragt Claude zuerst nach der Quelle.
 claude -p "/use-case-discovery https://github.com/[username]/[repo]" > analyse.md
 ```
 
-Der Command gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`), damit headless Läufe nicht an Berechtigungsabfragen hängen bleiben.
+Der Command gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`, Notion-Fetch), damit headless Läufe nicht an Berechtigungsabfragen hängen bleiben.
+
+### Quellenarten
+
+| Quelle | Übergabe | Hinweis |
+|---|---|---|
+| GitHub-Repo, Paper, Webseite | URL | Gelesen per WebFetch; Repos werden bei Bedarf in einen temporären Ordner geklont |
+| Notion-Seite | Notion-Link | Braucht einen verbundenen Notion-MCP-Server. Verweist die Seite nur auf eine andere Quelle (z.B. ein Bibliothekseintrag), wird das Original analysiert |
+| Video, Podcast, Vortrag | Transkript-Datei (`.txt`, `.vtt`, `.srt`), optional gefolgt von der URL | Eine URL allein genügt nicht: Titel und Beschreibung sind nicht der Inhalt |
+| Lokale Datei, PDF, Screenshot | Pfad | Der sicherste Weg für lange Texte |
+
+```
+/use-case-discovery https://app.notion.com/p/…
+/use-case-discovery vortrag-transkript.vtt https://youtu.be/…
+```
+
+**Name des Notion-Werkzeugs.** `allowed-tools` gibt `mcp__Notion__notion-fetch` und `mcp__notion__notion-fetch` frei, also die Namen, die ein Notion-Server unter der Bezeichnung `Notion` oder `notion` erhält. Heisst dein Server anders (prüfen mit `claude mcp list`), passe den Eintrag auf `mcp__<server-name>__notion-fetch` an. Sonst fragt Claude bei jedem Lauf nach der Berechtigung, und headless Läufe können Notion nicht lesen.
 
 ---
 
