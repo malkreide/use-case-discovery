@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-04
+
+### Added
+- Configurable role: the "Deine Rolle" section now has a ⚙️ note and three fields,
+  *Rolle*, *Expertise* and *Haltung*, that set the perspective and the yardstick for
+  the top-3 selection. The note recommends 2–4 fields of expertise that cover the
+  step-2 dimensions, and an explicit stance to avoid uncritical technology optimism.
+- "Role" as the first item of the Configuration section in both READMEs.
+
+### Changed
+- The default role is now domain-neutral (expertise in AI applications, technology
+  product development and organisational development) with a critical, delivery-oriented
+  stance. It previously named education and public administration, which reflected
+  the author's own context; that wording is kept in the READMEs as an example.
+  To keep the old behaviour, put it back into the *Expertise* field.
+
 ## [2.0.0] - 2026-10-04
 
 ### Changed

@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -38,13 +38,15 @@ Der Prompt wird **unkonfiguriert** ausgeliefert: Kontextdimensionen und Kreuzins
 
 ## Konfiguration
 
-Vor der ersten Verwendung füllst du die beiden Platzhalter-Blöcke in `.claude/commands/use-case-discovery.md` und prüfst die Tag-Liste. Alle drei sind im Prompt selbst mit einem ⚙️-Hinweis markiert.
+Vor der ersten Verwendung füllst du die beiden Platzhalter-Blöcke in `.claude/commands/use-case-discovery.md` und prüfst Rolle und Tag-Liste. Alle vier sind im Prompt selbst mit einem ⚙️-Hinweis markiert.
 
-**1 — Kontextdimensionen (Schritt 2).** Ersetze `[NAME DIMENSION A]` … `[NAME DIMENSION G]` durch deine eigenen Rollen, Organisationen und Lebensbereiche. Die Anzahl ist nicht fix — 4–8 Dimensionen funktionieren gut. Entscheidend ist der *Kontrast*: Wähle Kontexte mit wirklich unterschiedlichen Constraints, Stakeholdern und Erfolgskriterien. Je grösser der Abstand zwischen den Dimensionen, desto fruchtbarer die Matrix.
+**1 — Rolle.** Drei Felder legen fest, aus welcher Perspektive die Analyse geschrieben wird: *Rolle* (der Blickwinkel, aus dem Ideen beurteilt werden), *Expertise* (2–4 Fachgebiete, idealerweise passend zu deinen Dimensionen aus Schritt 2) und *Haltung* (wie kritisch, risikobewusst oder experimentierfreudig bewertet wird). Die ausgelieferte Vorgabe ist domänenneutral und funktioniert auch unkonfiguriert. Zur Illustration die frühere Fassung des Autors: strategischer Innovationsberater mit Expertise in KI-Anwendungen, Bildung, öffentlicher Verwaltung und technologischer Produktentwicklung.
 
-**2 — Kreuzinspirationsquellen (Schritt 3).** Ersetze die `[NAME PROJEKT / FRAMEWORK]`-Einträge durch Frameworks, Projekte, Komponenten, Hardware und Plattformen, die du **bereits hast**. 3–6 Einträge, je mit einem Satz zum Kernmechanismus. Je konkreter die Beschreibung, desto besser die Kombinationen.
+**2 — Kontextdimensionen (Schritt 2).** Ersetze `[NAME DIMENSION A]` … `[NAME DIMENSION G]` durch deine eigenen Rollen, Organisationen und Lebensbereiche. Die Anzahl ist nicht fix — 4–8 Dimensionen funktionieren gut. Entscheidend ist der *Kontrast*: Wähle Kontexte mit wirklich unterschiedlichen Constraints, Stakeholdern und Erfolgskriterien. Je grösser der Abstand zwischen den Dimensionen, desto fruchtbarer die Matrix.
 
-**3 — Notion-Tags (Schritt 4).** Der Prompt liefert eine domänenneutrale Liste mit acht Tags aus und vergibt pro Top-3-Use-Case genau einen davon. Neue Tags erfindet er nicht; passt keiner, schlägt er einen neuen separat vor. Ersetze die Liste durch die Optionen deiner Notion-Select-Eigenschaft, damit die Werte exakt übereinstimmen. Dieser Block funktioniert auch unkonfiguriert.
+**3 — Kreuzinspirationsquellen (Schritt 3).** Ersetze die `[NAME PROJEKT / FRAMEWORK]`-Einträge durch Frameworks, Projekte, Komponenten, Hardware und Plattformen, die du **bereits hast**. 3–6 Einträge, je mit einem Satz zum Kernmechanismus. Je konkreter die Beschreibung, desto besser die Kombinationen.
+
+**4 — Notion-Tags (Schritt 4).** Der Prompt liefert eine domänenneutrale Liste mit acht Tags aus und vergibt pro Top-3-Use-Case genau einen davon. Neue Tags erfindet er nicht; passt keiner, schlägt er einen neuen separat vor. Ersetze die Liste durch die Optionen deiner Notion-Select-Eigenschaft, damit die Werte exakt übereinstimmen. Dieser Block funktioniert auch unkonfiguriert.
 
 Der Prompt behält seine Platzhalter bewusst, damit das Repository wiederverwendbar bleibt. Deine ausgefüllte Fassung ist persönlich — halte sie in deinem eigenen Projekt, statt sie hierher zurückzuspielen.
 
