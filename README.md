@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.2.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -99,6 +99,12 @@ The command pre-approves the read-only tools it needs (`WebFetch`, `Read`, `Glob
 ```
 /use-case-discovery https://app.notion.com/p/…
 /use-case-discovery talk-transcript.vtt https://youtu.be/…
+```
+
+**Secondary sources and multiple topics.** When a source reports on another work (a newsletter, blog post or Notion copy about a repo or paper), the original is looked up and analysed. If it is not linked or not reachable, the status is at most `teilweise gelesen` and claims about it are marked as second-hand. When a source covers several unrelated topics, only the main topic (usually the one in the title) is analysed and the others are listed for separate runs. To pick a different topic, name it after the source:
+
+```
+/use-case-discovery https://app.notion.com/p/… Thema: GitHub-Chatbot
 ```
 
 **Notion tool name.** `allowed-tools` pre-approves `mcp__Notion__notion-fetch` and `mcp__notion__notion-fetch`, the names a Notion server gets when it is called `Notion` or `notion`. If your server has a different name (check with `claude mcp list`), adjust the entry to `mcp__<server-name>__notion-fetch`; otherwise Claude asks for permission on each run, and headless runs cannot read Notion.

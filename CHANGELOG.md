@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-10-04
+
+Rules for two cases found in the first real run, against a Notion entry from an
+AI source library that held a full newsletter copy with two unrelated topics and
+no link to the original.
+
+### Changed
+- Secondary sources: the rule for following an original now applies to every
+  source type, not only Notion pointer pages. It also covers copies of external
+  content (e.g. a newsletter pasted into Notion), not just short pointer entries.
+  When the original is not linked or not reachable, the status is at most
+  `teilweise gelesen`, the missing original is named, and figures, results and
+  assessments that only the secondary source claims are marked
+  *(laut Sekundärquelle)* in step 1.
+- Multiple topics: a source with several unrelated topics is analysed for its main
+  topic only (usually the one in the title); the others are listed in the source
+  status with a recommendation for separate runs. A topic named in the input takes
+  precedence. Without a main topic (e.g. a list of tools), the user is asked to
+  choose instead of the prompt picking one.
+- Both READMEs explain the two rules and how to name a topic in the input.
+
 ## [2.2.0] - 2026-10-04
 
 ### Added

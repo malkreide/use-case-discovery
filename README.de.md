@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.2.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -99,6 +99,12 @@ Der Command gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`,
 ```
 /use-case-discovery https://app.notion.com/p/…
 /use-case-discovery vortrag-transkript.vtt https://youtu.be/…
+```
+
+**Sekundärquellen und mehrere Themen.** Berichtet eine Quelle über ein anderes Werk (Newsletter, Blogbeitrag oder Notion-Kopie über ein Repo oder Paper), wird das Original gesucht und analysiert. Ist es nicht verlinkt oder nicht erreichbar, gilt höchstens `teilweise gelesen`, und Aussagen darüber werden als aus zweiter Hand gekennzeichnet. Behandelt eine Quelle mehrere unabhängige Themen, wird nur das Hauptthema analysiert (meist jenes im Titel); die übrigen werden für eigene Läufe aufgelistet. Für ein anderes Thema nennst du es nach der Quelle:
+
+```
+/use-case-discovery https://app.notion.com/p/… Thema: GitHub-Chatbot
 ```
 
 **Name des Notion-Werkzeugs.** `allowed-tools` gibt `mcp__Notion__notion-fetch` und `mcp__notion__notion-fetch` frei, also die Namen, die ein Notion-Server unter der Bezeichnung `Notion` oder `notion` erhält. Heisst dein Server anders (prüfen mit `claude mcp list`), passe den Eintrag auf `mcp__<server-name>__notion-fetch` an. Sonst fragt Claude bei jedem Lauf nach der Berechtigung, und headless Läufe können Notion nicht lesen.

@@ -59,10 +59,10 @@ Gedächtnis oder allein aus Name und Beschreibung.
   `git clone --depth 1` in ein temporäres Verzeichnis ausserhalb des Arbeitsverzeichnisses).
 - **Paper / Webseite:** Volltext per WebFetch, mindestens Abstract, Methode und Resultate.
 - **Notion-Link:** Seite mit dem Fetch-Werkzeug des Notion-MCP-Servers lesen
-  (`notion-fetch`), inklusive Eigenschaften. Ist die Seite nur ein Verweis, etwa
-  ein Bibliothekseintrag mit Link und kurzer Notiz, folge dem Link und lies die
-  Originalquelle. Analysiert wird das Original, nicht die Zusammenfassung; nenne
-  im Quellenstatus beide. Ist kein Notion-MCP-Server verbunden, gilt
+  (`notion-fetch`), inklusive Eigenschaften. Ist die Seite ein Verweis
+  (Bibliothekseintrag mit Link und Notiz) oder eine Kopie fremder Inhalte
+  (z.B. ein Newsletter), gilt die Regel für Sekundärquellen unten; prüfe dafür
+  auch die Link-Eigenschaften der Seite. Ist kein Notion-MCP-Server verbunden, gilt
   `nicht erreichbar` mit dem Hinweis, den Server zu verbinden oder die Seite als
   Datei zu exportieren.
 - **Video, Podcast, Vortrag:** Der Inhalt zählt, nicht die Seite darum herum.
@@ -71,6 +71,25 @@ Gedächtnis oder allein aus Name und Beschreibung.
   (z.B. `.txt`, `.vtt`, `.srt`). Werden Transkript und URL zusammen übergeben,
   analysiere das Transkript und nenne die URL als Herkunft.
 - **Lokaler Pfad oder eingefügter Text:** direkt lesen.
+
+Zwei Regeln gelten für alle Quellenarten:
+
+- **Sekundärquellen:** Berichtet die Quelle über ein anderes Werk (Newsletter,
+  Blogbeitrag, Zusammenfassung, Notion-Kopie über ein Repo oder Paper), suche
+  das Original über die verlinkten Quellen und lies es. Analysiert wird das
+  Original; nenne im Quellenstatus beide. Ist das Original nicht verlinkt oder
+  nicht erreichbar, gilt höchstens `teilweise gelesen`: Nenne, welches Original
+  fehlt und warum, und halte fest, dass die Aussagen darüber aus zweiter Hand
+  stammen. Zahlen, Resultate und Bewertungen, die nur die Sekundärquelle
+  behauptet, kennzeichnest du in Schritt 1 mit *(laut Sekundärquelle)*.
+- **Mehrere Themen:** Behandelt die Quelle mehrere voneinander unabhängige
+  Themen (z.B. ein Newsletter mit mehreren Beiträgen), analysiere nur das
+  Hauptthema, in der Regel jenes, auf das sich Titel oder Seitenname beziehen.
+  Nenne die übrigen Themen im Quellenstatus mit je einem Satz und empfiehl für
+  jedes einen eigenen Lauf, wenn möglich mit dem Original als Quelle. Vermische
+  die Themen nicht. Nennt die Eingabe ausdrücklich ein Thema, gilt dieses. Gibt
+  es kein Hauptthema (z.B. eine Liste mehrerer Tools), liste die Themen auf und
+  frage, welches analysiert werden soll, statt eines auszuwählen.
 
 Beginne den Output mit einer Zeile **Quellenstatus** und genau einem dieser Werte:
 
