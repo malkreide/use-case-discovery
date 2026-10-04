@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-2.1.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -21,6 +21,7 @@ The prompt ships **unconfigured**: context dimensions and cross-inspiration sour
 ## Features
 
 - **Source check first**: the source must actually be read; the output opens with a source status and stops if the source is unreachable
+- **Source types**: GitHub repos, papers and web pages, Notion pages (via a connected Notion MCP server), video and podcast transcripts, local files including PDFs
 - **5-step structured analysis** from technical abstraction to actionable top-3 recommendations
 - **Configurable context dimensions** (4–8 recommended) covering whatever roles and domains you operate in
 - **Combinatorics step** forcing unexpected combinations with your own frameworks, projects, and infrastructure
@@ -84,7 +85,23 @@ Without an argument, Claude asks for the source first.
 claude -p "/use-case-discovery https://github.com/[username]/[repo]" > analysis.md
 ```
 
-The command pre-approves the read-only tools it needs (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`), so headless runs are not blocked by permission prompts.
+The command pre-approves the read-only tools it needs (`WebFetch`, `Read`, `Glob`, `Grep`, `git clone`, Notion fetch), so headless runs are not blocked by permission prompts.
+
+### Source types
+
+| Source | How to pass it | Note |
+|---|---|---|
+| GitHub repo, paper, web page | URL | Read via WebFetch; repos may be cloned to a temporary folder |
+| Notion page | Notion link | Needs a connected Notion MCP server. If the page only points to another source (e.g. a library entry), the original is analysed |
+| Video, podcast, talk | Transcript file (`.txt`, `.vtt`, `.srt`), optionally followed by the URL | A URL alone is not enough: title and description are not the content |
+| Local file, PDF, screenshot | Path | The safest way to pass long text |
+
+```
+/use-case-discovery https://app.notion.com/p/…
+/use-case-discovery talk-transcript.vtt https://youtu.be/…
+```
+
+**Notion tool name.** `allowed-tools` pre-approves `mcp__Notion__notion-fetch` and `mcp__notion__notion-fetch`, the names a Notion server gets when it is called `Notion` or `notion`. If your server has a different name (check with `claude mcp list`), adjust the entry to `mcp__<server-name>__notion-fetch`; otherwise Claude asks for permission on each run, and headless runs cannot read Notion.
 
 ---
 

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-04
+
+### Added
+- Notion pages as a source: step 0 reads them with the Notion MCP server's
+  `notion-fetch` tool, properties included. When a page only points to another
+  source (e.g. a library entry with a link), the original is followed and analysed,
+  and the source status names both. Without a connected Notion server the status is
+  `nicht erreichbar`, with a hint to connect it or export the page.
+- Video, podcast and talk sources: the content must be read, so title, description
+  and comments are not enough. Without a readable transcript the status is
+  `nicht erreichbar` and the user is asked for a transcript file (`.txt`, `.vtt`,
+  `.srt`); a transcript plus URL is analysed from the transcript with the URL as origin.
+- `mcp__Notion__notion-fetch` and `mcp__notion__notion-fetch` in `allowed-tools`;
+  `argument-hint` lists Notion links.
+- "Source types" section in both READMEs, including how to adjust the Notion tool
+  name when the server is named differently.
+
 ## [2.1.0] - 2026-10-04
 
 ### Added

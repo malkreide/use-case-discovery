@@ -1,7 +1,7 @@
 ---
 description: Use-Case-Analyse einer Technologiequelle (Repo, Paper, Tool) in fünf Schritten, mit Kreuzinspiration
-argument-hint: <URL | Repo | Paper | lokaler Pfad>
-allowed-tools: WebFetch, Read, Glob, Grep, Bash(git clone:*)
+argument-hint: <URL | Repo | Paper | Notion-Link | lokaler Pfad>
+allowed-tools: WebFetch, Read, Glob, Grep, Bash(git clone:*), mcp__Notion__notion-fetch, mcp__notion__notion-fetch
 ---
 
 # USE CASE DISCOVERY ENGINE
@@ -58,6 +58,18 @@ Gedächtnis oder allein aus Name und Beschreibung.
 - **GitHub-Repo:** README und die zentralen Dateien lesen (WebFetch; bei Bedarf
   `git clone --depth 1` in ein temporäres Verzeichnis ausserhalb des Arbeitsverzeichnisses).
 - **Paper / Webseite:** Volltext per WebFetch, mindestens Abstract, Methode und Resultate.
+- **Notion-Link:** Seite mit dem Fetch-Werkzeug des Notion-MCP-Servers lesen
+  (`notion-fetch`), inklusive Eigenschaften. Ist die Seite nur ein Verweis, etwa
+  ein Bibliothekseintrag mit Link und kurzer Notiz, folge dem Link und lies die
+  Originalquelle. Analysiert wird das Original, nicht die Zusammenfassung; nenne
+  im Quellenstatus beide. Ist kein Notion-MCP-Server verbunden, gilt
+  `nicht erreichbar` mit dem Hinweis, den Server zu verbinden oder die Seite als
+  Datei zu exportieren.
+- **Video, Podcast, Vortrag:** Der Inhalt zählt, nicht die Seite darum herum.
+  Titel, Beschreibung und Kommentare reichen nicht für eine Analyse. Ist kein
+  Transkript lesbar, gilt `nicht erreichbar`: Bitte um das Transkript als Datei
+  (z.B. `.txt`, `.vtt`, `.srt`). Werden Transkript und URL zusammen übergeben,
+  analysiere das Transkript und nenne die URL als Herkunft.
 - **Lokaler Pfad oder eingefügter Text:** direkt lesen.
 
 Beginne den Output mit einer Zeile **Quellenstatus** und genau einem dieser Werte:
