@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.2-blue)
+![Version](https://img.shields.io/badge/version-3.0.3-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -182,17 +182,17 @@ git checkout -- .claude/skills/use-case-discovery/profil-laden.sh
 
 ### Example: context dimensions in the profile
 
-This is the author's own configuration — an illustration of the *kind* of contrast that makes the matrix work, not a default to adopt:
+An invented example, the head of digital services in a mid-sized municipality. It illustrates the *kind* of contrast that makes the matrix work, not a default to adopt:
 
 | Dim | Domain |
 |---|---|
-| A | Municipal School Office (Schulamt) |
-| B | City administration (cross-departmental) |
-| C | AI working group (public sector AI governance) |
-| D | Schools & education (operational) |
-| E | Private: children & family |
-| F | Private: investments (real estate, ETF, crypto) |
-| G | Private: technology & making (Raspberry Pi, MCP, Edge AI) |
+| A | Municipal administration: digitalisation and communication |
+| B | Regional association of municipalities (cross-municipal cooperation) |
+| C | Data protection and information security working group |
+| D | Residents' services (front desk, public enquiries) |
+| E | Private: volunteering at a sports club |
+| F | Private: part-time continuing education |
+| G | Private: technology & making (Raspberry Pi, local AI) |
 
 Note the spread: A–D differ in scale and mandate within one professional context, E–G add private domains with entirely different success criteria. A tool that is unremarkable in one is often transformative in another.
 
