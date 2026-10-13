@@ -20,7 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test case T02 pointed at this repository, which is checked out locally during
   test runs, so the model read the local files and the case never exercised
   reading from the network. T02 now targets `github.com/malkreide/personakit`
-  and checks that the source status names files beyond the README.
+  and checks that the source status names files beyond the README. Against the
+  unfixed skill, T02 failed on the status check ("teilweise gelesen", clone
+  refused). The file-name check alone is weak: it also passes when `docs/`
+  files were fetched via WebFetch.
 
 ## [3.0.0] - 2026-10-04
 
