@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.5] - 2026-10-13
+
+### Fixed
+- Notion export order: in a manual test the model read the Notion database
+  before the analysis, and a second run in a fresh session produced top-3 use
+  cases word for word identical to the existing entries. Step 6b now forbids any
+  Notion access for the export until steps 1–6a are fully written (a Notion page
+  that is itself the source stays allowed), and the duplicate check may only
+  decide between creating and "already recorded", never change the top 3.
+- READMEs: whether Claude Code asks before writing to Notion depends on the
+  user's permissions, not on the skill. In the same test, an earlier permanent
+  approval let the skill write without a prompt. Both READMEs now say so and
+  show how to check and remove such approvals with `/permissions`.
+
+### Added
+- Step 6b: before the first write, the skill lists which use cases it will
+  create (name, tag) and which it rates as already recorded, with a short
+  reason. This holds with or without a permission prompt.
+
 ## [3.0.4] - 2026-10-13
 
 ### Changed
