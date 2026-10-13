@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.6] - 2026-10-13
+
+### Changed
+- Step 6b: the closing lines of the Notion export give each link as a full URL in
+  plain text, not as a Markdown link. In the manual test the terminal showed only
+  the link text «Link»; the link stayed clickable there, but copying the output
+  lost the address.
+
+### Added
+- tests/README: the manual Notion test as four runs (create, duplicate check,
+  no `--notion`, missing tag option), with the note that an option must be
+  deleted in the database properties, not only removed from a row.
+
 ## [3.0.5] - 2026-10-13
 
 ### Fixed

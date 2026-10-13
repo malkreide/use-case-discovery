@@ -47,7 +47,20 @@ Abbruchfälle sind günstig.
 
 Nicht abgedeckt ist das tatsächliche Schreiben nach Notion: Es bräuchte eine
 verbundene Testdatenbank und hätte Aussenwirkung. Prüfe es von Hand mit einer
-eigenen Testdatenbank, bevor du dich darauf verlässt.
+eigenen Testdatenbank, bevor du dich darauf verlässt. Starte jeden Lauf in einer
+neuen Sitzung, sonst übernimmt das Modell die Analyse aus dem Gespräch.
+
+| Lauf | Vorbereitung | Eingabe | Erwartet |
+|---|---|---|---|
+| M1 | Leere Testdatenbank | `fixtures/werkzeug.md --notion` | Notion erst nach 6a, Vorschau mit Name und Tag, drei Einträge, Abschlusszeilen mit vollständiger URL |
+| M2 | Einträge aus M1 behalten | dieselbe | Bestehende Ideen als *bereits erfasst* mit URL, Top-3 unabhängig vom Bestand |
+| M3 | – | `fixtures/werkzeug.md` | Kein Notion-Aufruf, «Notion-Export: nicht ausgeführt» |
+| M4 | Einträge löschen, eine vergebene Tag-Option in der Datenbank löschen | `fixtures/werkzeug.md --notion` | Keine neue Option, Tag leer, Vermerk |
+
+Für M4 musst du die Option in den Eigenschaften der Datenbank löschen. Entfernst
+du den Tag nur aus einer Zeile, bleibt die Option bestehen. Weil die Tags von Lauf
+zu Lauf wechseln können, ist M4 nur aussagekräftig, wenn einer der Top-3 die
+gelöschte Option bekommt.
 
 Die lokalen Testquellen beschreiben erfundene Werkzeuge, das Testprofil eine
 erfundene Musikschule. So kann das Modell sie

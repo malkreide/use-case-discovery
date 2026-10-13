@@ -323,7 +323,9 @@ daraus; ausgenommen ist nur eine Notion-Seite, die selbst die Quelle ist
    anderem Weg.
 
 Schliesse mit einer Zeile pro Use Case: *angelegt* (mit Link), *bereits
-erfasst* (mit Link) oder *nicht angelegt* (mit Grund).
+erfasst* (mit Link) oder *nicht angelegt* (mit Grund). Schreibe jeden Link als
+vollständige URL im Klartext, nicht als Markdown-Link mit Linktext: Beim Kopieren
+der Ausgabe ginge sonst die Adresse verloren.
 
 ---
 
