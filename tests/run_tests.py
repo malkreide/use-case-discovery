@@ -138,9 +138,22 @@ CASES = [
     ),
     Case(
         "T02",
-        "GitHub-Repo",
-        "https://github.com/malkreide/use-case-discovery",
-        [status("vollständig gelesen"), *FULL_ANALYSIS, *WITHOUT_PROFILE],
+        "Externes GitHub-Repo",
+        # Bewusst ein anderes Repo: Dieses hier liegt beim Testlauf lokal vor
+        # und würde ohne Abruf aus dem Netz gelesen.
+        "https://github.com/malkreide/personakit",
+        [
+            status("vollständig gelesen"),
+            Check(
+                MUSS,
+                "Quellenstatus nennt Dateien jenseits des README (Repo geklont)",
+                "contains",
+                r"docs/|src/|SKILL\.md|schemas?/",
+                head=1500,
+            ),
+            *FULL_ANALYSIS,
+            *WITHOUT_PROFILE,
+        ],
         network=True,
     ),
     Case(
@@ -178,7 +191,7 @@ CASES = [
         f"{FIXTURES}/newsletter-zwei-themen.md",
         [
             status("teilweise gelesen"),
-            contains(r"\(laut Sekundärquelle\)", "Kennzeichnet Herstellerangaben als Sekundärquelle"),
+            contains(r"\(laut Sekundärquelle[^)\n]*\)", "Kennzeichnet Herstellerangaben als Sekundärquelle"),
             contains(r"VoxLokal", "Nennt das Nebenthema"),
             contains(r"(?i)eigene[nrm]?\s+Lauf", "Empfiehlt einen eigenen Lauf für das Nebenthema"),
             contains(MATRIX, "Analysiert das Hauptthema"),

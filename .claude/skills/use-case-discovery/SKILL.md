@@ -109,8 +109,12 @@ sie vorliegt.
 Lies die Quelle tatsächlich, bevor du analysierst. Analysiere nie aus dem
 Gedächtnis oder allein aus Name und Beschreibung.
 
-- **GitHub-Repo:** README und die zentralen Dateien lesen (WebFetch; bei Bedarf
-  `git clone --depth 1` in ein temporäres Verzeichnis ausserhalb des Arbeitsverzeichnisses).
+- **GitHub-Repo:** Klone das Repo mit genau einem einfachen Befehl, ohne `cd`,
+  `&&`, Pipes oder Variablen: `git clone --depth 1 <URL> /tmp/ucd-<repo-name>`
+  (existiert der Ordner, hänge eine Zahl an). Nur diese Form ist vorab
+  freigegeben. Lies danach README und die zentralen Dateien mit Read, Glob und
+  Grep. WebFetch liefert eine Zusammenfassung statt des Wortlauts: Stützt sich
+  die Analyse eines Repos nur darauf, gilt höchstens `teilweise gelesen`.
 - **Paper / Webseite:** Volltext per WebFetch, mindestens Abstract, Methode und Resultate.
 - **Notion-Link:** Seite mit dem Fetch-Werkzeug des Notion-MCP-Servers lesen
   (`notion-fetch`), inklusive Eigenschaften. Ist die Seite ein Verweis
