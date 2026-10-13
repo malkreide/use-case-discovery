@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.1-blue)
+![Version](https://img.shields.io/badge/version-3.0.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -55,6 +55,18 @@ cp .claude/skills/use-case-discovery/profil-vorlage.md ~/.claude/use-case-discov
 ```
 
 For a single project, copy the folder to `/path/to/project/.claude/skills/` instead. Inside this repository the skill is available as-is, which is handy for trying it without a profile.
+
+**Windows (PowerShell):** on Windows, Claude Code needs Git for Windows; the loader script runs in its Git Bash. From the cloned repository folder:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
+Remove-Item -Recurse -Force "$HOME\.claude\skills\use-case-discovery" -ErrorAction SilentlyContinue
+Copy-Item -Recurse ".claude\skills\use-case-discovery" "$HOME\.claude\skills\"
+New-Item -ItemType Directory -Force "$HOME\.claude\use-case-discovery" | Out-Null
+Copy-Item ".claude\skills\use-case-discovery\profil-vorlage.md" "$HOME\.claude\use-case-discovery\profil.md"
+```
+
+Windows PowerShell 5.1 does not support `&&`; run the commands one by one or as a block. Test the skill outside the repository folder, otherwise Claude Code also finds the copy inside the repository.
 
 **Updating:** copy the skill folder again. The profile lives outside it and stays unchanged.
 
@@ -146,6 +158,13 @@ claude -p "/use-case-discovery <source> --notion" --allowedTools "mcp__notion__n
 ### Troubleshooting
 
 **The profile line says the profile could not be loaded.** Check that `profil-laden.sh` in the skill folder is executable (`chmod +x ~/.claude/skills/use-case-discovery/profil-laden.sh`). Copying from a ZIP archive drops the executable bit.
+
+**On Windows: the loader script fails with a syntax error.** The script has Windows line endings. Since 3.0.2, `.gitattributes` prevents this in new clones. In an older clone, check the script out again after `git pull`, then copy the skill folder again:
+
+```powershell
+Remove-Item .claude\skills\use-case-discovery\profil-laden.sh
+git checkout -- .claude/skills/use-case-discovery/profil-laden.sh
+```
 
 ---
 

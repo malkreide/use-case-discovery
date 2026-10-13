@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.1-blue)
+![Version](https://img.shields.io/badge/version-3.0.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -53,6 +53,18 @@ cp .claude/skills/use-case-discovery/profil-vorlage.md ~/.claude/use-case-discov
 ```
 
 Für ein einzelnes Projekt kopierst du den Ordner stattdessen nach `/pfad/zum/projekt/.claude/skills/`. In diesem Repository ist der Skill direkt verfügbar, praktisch zum Ausprobieren ohne Profil.
+
+**Windows (PowerShell):** Claude Code braucht unter Windows Git für Windows; das Ladeskript läuft in dessen Git Bash. Im Ordner des geklonten Repositorys:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
+Remove-Item -Recurse -Force "$HOME\.claude\skills\use-case-discovery" -ErrorAction SilentlyContinue
+Copy-Item -Recurse ".claude\skills\use-case-discovery" "$HOME\.claude\skills\"
+New-Item -ItemType Directory -Force "$HOME\.claude\use-case-discovery" | Out-Null
+Copy-Item ".claude\skills\use-case-discovery\profil-vorlage.md" "$HOME\.claude\use-case-discovery\profil.md"
+```
+
+Windows PowerShell 5.1 kennt `&&` nicht; führe die Befehle einzeln oder als Block aus. Teste den Skill ausserhalb des Repository-Ordners, sonst findet Claude Code zusätzlich die Kopie im Repository.
 
 **Update:** Nur den Skill-Ordner erneut kopieren. Das Profil liegt ausserhalb und bleibt unverändert.
 
@@ -144,6 +156,13 @@ claude -p "/use-case-discovery <Quelle> --notion" --allowedTools "mcp__notion__n
 ### Fehlerbehebung
 
 **Die Profilzeile meldet, dass kein Profil geladen werden konnte.** Prüfe, ob `profil-laden.sh` im Skill-Ordner ausführbar ist (`chmod +x ~/.claude/skills/use-case-discovery/profil-laden.sh`). Beim Kopieren aus einem ZIP-Archiv geht das Ausführungsrecht verloren.
+
+**Unter Windows: Das Ladeskript bricht mit einem Syntaxfehler ab.** Das Skript hat Windows-Zeilenenden. Seit 3.0.2 verhindert `.gitattributes` das bei neuen Klonen. In einem älteren Klon checkst du das Skript nach dem `git pull` neu aus und kopierst den Skill-Ordner danach erneut:
+
+```powershell
+Remove-Item .claude\skills\use-case-discovery\profil-laden.sh
+git checkout -- .claude/skills/use-case-discovery/profil-laden.sh
+```
 
 ---
 
