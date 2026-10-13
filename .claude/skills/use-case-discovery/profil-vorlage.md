@@ -12,6 +12,11 @@ Vorgabe gelten. Einträge mit Platzhaltern in eckigen Klammern werden ignoriert.
 
 Das Profil liegt ausserhalb des Skill-Ordners. Ein Update des Skills lässt es
 deshalb unberührt.
+
+Bearbeite die Datei als reinen Text (z.B. VS Code). Editoren mit
+Markdown-Formatierung schreiben sie beim Speichern neu und können die
+Abschlüsse dieser Kommentare entfernen. Du kannst die Kommentare in deinem
+Profil auch ganz löschen.
 -->
 
 ## Rolle
