@@ -35,7 +35,7 @@ Abbruchfälle sind günstig.
 | ID | Quelle | Prüft | Erwartet |
 |---|---|---|---|
 | T01 | `fixtures/werkzeug.md` | Normalfall ohne Profil | `vollständig gelesen`, Profilzeile «keines», Schritte 1–5, Bewertungstabelle, «Risiken & Voraussetzungen» bei allen Top-3, Export-Block mit drei Use Cases, Hinweis auf fehlende Kreuzinspiration |
-| T02 | dieses Repository auf GitHub | GitHub-Repo per URL *(Netzwerk)* | wie T01 |
+| T02 | `github.com/malkreide/personakit` | Externes GitHub-Repo per URL *(Netzwerk)* | wie T01, zusätzlich nennt der Quellenstatus Dateien jenseits des README (Beleg, dass geklont statt nur per WebFetch zusammengefasst wurde) |
 | T03 | URL mit Endung `.invalid` | nicht erreichbare Quelle *(Netzwerk)* | `nicht erreichbar`, Abbruch vor Schritt 2 |
 | T04 | YouTube-Video | Video ohne Transkript *(Netzwerk)* | `nicht erreichbar`, Bitte um Transkript, Abbruch |
 | T05 | `fixtures/paywall-artikel.md` | abgeschnittener Artikel | `teilweise gelesen`, Paywall als Grund |
@@ -53,6 +53,10 @@ Die lokalen Testquellen beschreiben erfundene Werkzeuge, das Testprofil eine
 erfundene Musikschule. So kann das Modell sie
 nicht aus dem Gedächtnis ergänzen, und eine Analyse, die Inhalte erfindet, fällt
 eher auf.
+
+Für T02 ist bewusst ein anderes Repository gewählt: Dieses hier liegt beim
+Testlauf lokal vor, und das Modell liest dann die lokalen Dateien statt der
+URL. Ein Test gegen das eigene Repo prüft das Lesen aus dem Netz deshalb nicht.
 
 ## Prüfstufen
 

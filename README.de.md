@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.0-blue)
+![Version](https://img.shields.io/badge/version-3.0.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -122,7 +122,8 @@ claude -p "/use-case-discovery <Quelle> --notion" --allowedTools "mcp__notion__n
 
 | Quelle | Übergabe | Hinweis |
 |---|---|---|
-| GitHub-Repo, Paper, Webseite | URL | Gelesen per WebFetch; Repos werden bei Bedarf in einen temporären Ordner geklont |
+| GitHub-Repo | URL | Wird nach `/tmp/ucd-<name>` geklont und dateiweise gelesen; WebFetch allein liefert nur eine Zusammenfassung, ein so gelesenes Repo gilt höchstens als teilweise gelesen |
+| Paper, Webseite | URL | Gelesen per WebFetch |
 | Notion-Seite | Notion-Link | Braucht einen verbundenen Notion-MCP-Server. Verweist die Seite nur auf eine andere Quelle (z.B. ein Bibliothekseintrag), wird das Original analysiert |
 | Video, Podcast, Vortrag | Transkript-Datei (`.txt`, `.vtt`, `.srt`), optional gefolgt von der URL | Eine URL allein genügt nicht: Titel und Beschreibung sind nicht der Inhalt |
 | Lokale Datei, PDF, Screenshot | Pfad | Der sicherste Weg für lange Texte |

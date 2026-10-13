@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-10-13
+
+### Fixed
+- GitHub repos were often read only through WebFetch, which returns a summary
+  rather than the files. The pre-approved `Bash(git clone:*)` rule matches only a
+  plain command, and the model tended to build compound ones (`cd … &&`,
+  `mktemp`), which were refused. Step 0 now prescribes the exact form
+  `git clone --depth 1 <URL> /tmp/ucd-<repo-name>` and reading the files with
+  Read, Glob and Grep; a repo read only via WebFetch counts as
+  `teilweise gelesen` at most.
+- Test case T02 pointed at this repository, which is checked out locally during
+  test runs, so the model read the local files and the case never exercised
+  reading from the network. T02 now targets `github.com/malkreide/personakit`
+  and checks that the source status names files beyond the README.
+
 ## [3.0.0] - 2026-10-04
 
 Separates the configuration from the analysis logic and adds an export step.

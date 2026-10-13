@@ -138,9 +138,22 @@ CASES = [
     ),
     Case(
         "T02",
-        "GitHub-Repo",
-        "https://github.com/malkreide/use-case-discovery",
-        [status("vollständig gelesen"), *FULL_ANALYSIS, *WITHOUT_PROFILE],
+        "Externes GitHub-Repo",
+        # Bewusst ein anderes Repo: Dieses hier liegt beim Testlauf lokal vor
+        # und würde ohne Abruf aus dem Netz gelesen.
+        "https://github.com/malkreide/personakit",
+        [
+            status("vollständig gelesen"),
+            Check(
+                MUSS,
+                "Quellenstatus nennt Dateien jenseits des README (Repo geklont)",
+                "contains",
+                r"docs/|src/|SKILL\.md|schemas?/",
+                head=1500,
+            ),
+            *FULL_ANALYSIS,
+            *WITHOUT_PROFILE,
+        ],
         network=True,
     ),
     Case(
