@@ -292,6 +292,11 @@ use_cases:
 **6b — Notion-Export (nur mit `--notion`).** Ohne `--notion` in der Eingabe
 schreibst du nichts nach Notion. Mit `--notion` gilt:
 
+**Reihenfolge:** Rufe Notion für den Export erst auf, wenn die Schritte 1 bis 6a
+vollständig ausgegeben sind. Lies vorher weder die Datenbank noch andere Seiten
+daraus; ausgenommen ist nur eine Notion-Seite, die selbst die Quelle ist
+(Schritt 0). Der Bestand darf Analyse und Top-3 nicht beeinflussen.
+
 1. **Voraussetzungen prüfen.** Nennt das Profil unter *Notion-Export* keine
    Datenbank, oder ist kein Notion-MCP-Server verbunden, schreibe nichts. Nenne
    den Grund in einer Zeile «Notion-Export: nicht ausgeführt, …». Der
@@ -303,12 +308,17 @@ schreibst du nichts nach Notion. Mit `--notion` gilt:
 3. **Doppel prüfen.** Suche für jeden Top-3-Use-Case mit `notion-search` in der
    Datenbank nach dem Namen und den Kernbegriffen. Beschreibt ein bestehender
    Eintrag im Kern dieselbe Idee, lege keinen neuen an; nenne den bestehenden
-   Eintrag mit Link.
-4. **Anlegen.** Lege jeden übrigen Use Case als neue Seite in genau dieser
+   Eintrag mit Link. Die Doppelprüfung entscheidet nur zwischen anlegen und
+   bereits erfasst; die Top-3 aus Schritt 4 bleiben unverändert.
+4. **Vorschau.** Nenne vor dem ersten Schreibaufruf in je einer Zeile, welche
+   Use Cases du anlegst (Name, Tag) und welche du als bereits erfasst einstufst,
+   mit einem Halbsatz Begründung. Ob Claude Code danach nachfragt, hängt von den
+   Berechtigungen ab; die Vorschau gilt auch ohne Rückfrage.
+5. **Anlegen.** Lege jeden übrigen Use Case als neue Seite in genau dieser
    Datenbank an (`notion-create-pages`), mit den Eigenschaften aus dem Profil.
    Der Seiteninhalt enthält Problem, Lösung, Risiken & Voraussetzungen, Nächster
    Schritt, Bewertung und Quelle.
-5. **Grenzen.** Ändere oder lösche keine bestehenden Seiten und schreibe in keine
+6. **Grenzen.** Ändere oder lösche keine bestehenden Seiten und schreibe in keine
    andere Datenbank. Wird eine Schreibaktion abgelehnt, versuche sie nicht auf
    anderem Weg.
 
@@ -358,4 +368,6 @@ jeder Lauf eigene Kategorien erfindet und die Wissensdatenbank zerfasert.
 Schreiben in eine geteilte Datenbank ist eine Handlung mit Aussenwirkung. Sie
 soll bewusst ausgelöst werden, nicht als Nebeneffekt jeder Analyse. Die
 Doppelprüfung hält die Datenbank sauber und zeigt nebenbei, welche Ideen im
-eigenen Bestand schon existieren.
+eigenen Bestand schon existieren. Gelesen wird der Bestand erst nach der
+Analyse: Sonst lehnt sich die Auswahl an Bekanntes an, und der Skill schlägt mit
+wachsender Datenbank immer wieder dieselben Ideen vor.

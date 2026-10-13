@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.4-blue)
+![Version](https://img.shields.io/badge/version-3.0.5-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -124,9 +124,9 @@ Der Skill gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`, `
 /use-case-discovery https://github.com/[username]/[repo] --notion
 ```
 
-Mit `--notion` und einer Datenbank im Profil liest der Skill zuerst die Datenbank, sucht für jeden Top-3-Use-Case nach bestehenden Einträgen und legt nur neue Ideen an. Bestehende Seiten werden nie geändert oder gelöscht. Ohne `--notion` schreibt der Skill nichts nach Notion; der YAML-Block am Ende jeder Analyse bleibt die Ablage.
+Mit `--notion` und einer Datenbank im Profil liest der Skill nach Abschluss der Analyse die Datenbank, sucht für jeden Top-3-Use-Case nach bestehenden Einträgen und legt nur neue Ideen an. Vor der Analyse schaut er nicht in die Datenbank, damit der Bestand die Auswahl nicht prägt. Vor dem ersten Schreiben nennt er, welche Seiten er anlegt. Bestehende Seiten werden nie geändert oder gelöscht. Ohne `--notion` schreibt der Skill nichts nach Notion; der YAML-Block am Ende jeder Analyse bleibt die Ablage.
 
-Das Schreiben (`notion-create-pages`) ist bewusst **nicht** vorab freigegeben: Interaktiv bestätigst du jede Schreibaktion. Für headless Läufe gibst du sie ausdrücklich frei:
+Das Schreiben (`notion-create-pages`) gibt der Skill bewusst **nicht** vorab frei. Ob Claude Code vor dem Schreiben nachfragt, hängt aber von deinen Einstellungen ab: Hast du Notion-Werkzeuge früher dauerhaft erlaubt («Yes, and don't ask again») oder arbeitest du in einem Modus ohne Rückfragen, schreibt der Skill mit `--notion` ohne Bestätigung. Prüfen kannst du das in Claude Code mit `/permissions`: Einträge wie `mcp__notion`, `mcp__notion__*` oder `mcp__notion__notion-create-pages` unter «Allow» erlauben das Schreiben. Willst du vor jedem Schreiben gefragt werden, entferne sie; erlaubt bleiben nur `mcp__notion__notion-fetch` und `mcp__notion__notion-search`. Für headless Läufe gibst du das Schreiben ausdrücklich frei:
 
 ```bash
 claude -p "/use-case-discovery <Quelle> --notion" --allowedTools "mcp__notion__notion-create-pages"

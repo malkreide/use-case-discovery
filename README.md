@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.4-blue)
+![Version](https://img.shields.io/badge/version-3.0.5-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -126,9 +126,9 @@ The skill pre-approves the read-only tools it needs (`WebFetch`, `Read`, `Glob`,
 /use-case-discovery https://github.com/[username]/[repo] --notion
 ```
 
-With `--notion` and a database in the profile, the skill first reads the database, searches it for existing entries for each top-3 use case, and creates only new ideas. Existing pages are never changed or deleted. Without `--notion` the skill writes nothing to Notion; the YAML block at the end of every analysis is the record.
+With `--notion` and a database in the profile, the skill reads the database once the analysis is complete, searches it for existing entries for each top-3 use case, and creates only new ideas. It does not look into the database before the analysis, so the existing entries cannot shape the selection. Before the first write it lists the pages it will create. Existing pages are never changed or deleted. Without `--notion` the skill writes nothing to Notion; the YAML block at the end of every analysis is the record.
 
-Writing (`notion-create-pages`) is deliberately **not** pre-approved: interactively you confirm each write. For headless runs, allow it explicitly:
+The skill deliberately does **not** pre-approve writing (`notion-create-pages`). Whether Claude Code asks before writing depends on your settings, though: if you once allowed Notion tools permanently ("Yes, and don't ask again") or work in a mode without prompts, the skill writes with `--notion` without confirmation. Check with `/permissions` in Claude Code: entries such as `mcp__notion`, `mcp__notion__*` or `mcp__notion__notion-create-pages` under "Allow" permit writing. To be asked before every write, remove them; only `mcp__notion__notion-fetch` and `mcp__notion__notion-search` need to stay allowed. For headless runs, allow writing explicitly:
 
 ```bash
 claude -p "/use-case-discovery <source> --notion" --allowedTools "mcp__notion__notion-create-pages"
