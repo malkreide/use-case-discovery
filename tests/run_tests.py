@@ -191,7 +191,7 @@ CASES = [
         f"{FIXTURES}/newsletter-zwei-themen.md",
         [
             status("teilweise gelesen"),
-            contains(r"\(laut Sekundärquelle\)", "Kennzeichnet Herstellerangaben als Sekundärquelle"),
+            contains(r"\(laut Sekundärquelle[^)\n]*\)", "Kennzeichnet Herstellerangaben als Sekundärquelle"),
             contains(r"VoxLokal", "Nennt das Nebenthema"),
             contains(r"(?i)eigene[nrm]?\s+Lauf", "Empfiehlt einen eigenen Lauf für das Nebenthema"),
             contains(MATRIX, "Analysiert das Hauptthema"),

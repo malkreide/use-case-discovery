@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   unfixed skill, T02 failed on the status check ("teilweise gelesen", clone
   refused). The file-name check alone is weak: it also passes when `docs/`
   files were fetched via WebFetch.
+- The T06 check for *(laut Sekundärquelle)* now also accepts an addition inside
+  the brackets, e.g. *(laut Sekundärquelle, Herstellerangabe)*; it had failed a
+  correct output.
 
 ## [3.0.0] - 2026-10-04
 
