@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.2] - 2026-10-13
+
+### Fixed
+- On Windows, Git for Windows checks files out with CRLF line endings by default
+  (`core.autocrlf=true`), and `profil-laden.sh` then fails with a syntax error,
+  so no profile is loaded. A new `.gitattributes` keeps `*.sh` files at LF.
+  Reproduced with a `core.autocrlf=true` clone before the fix (syntax error) and
+  checked after it (no CR, script runs); other files are unaffected. Existing
+  clones need the script checked out again once (see the READMEs).
+
+### Added
+- Windows (PowerShell) installation commands and a troubleshooting entry for the
+  line-ending error in both READMEs. First confirmed run on Windows with
+  Windows PowerShell 5.1: the installed skill loads the profile.
+
 ## [3.0.1] - 2026-10-13
 
 ### Fixed
