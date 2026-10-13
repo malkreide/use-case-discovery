@@ -7,12 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- The entries for 1.0.0, 1.0.1 and 3.0.3 no longer list the author's personal
+  configuration in detail; they describe the change in neutral terms.
+
 ## [3.0.3] - 2026-10-13
 
 ### Changed
 - The example context dimensions in both READMEs are now an invented
   configuration (head of digital services in a municipality) instead of the
-  author's own, which named family and investment details.
+  author's own, which contained personal details.
 
 ## [3.0.2] - 2026-10-13
 
@@ -252,12 +256,10 @@ no link to the original.
 ### Changed
 - Documentation now matches the shipped prompt: the context dimensions (A–G) and
   cross-inspiration sources are described as configurable placeholders rather than
-  as fixed content. The author's own setup (Schulamt, city administration, AI working
-  group, education, family, investments, making) is retained as a clearly labelled
+  as fixed content. The author's own setup is retained as a clearly labelled
   example configuration.
-- Feature list no longer advertises a fixed count of 7 dimensions or names specific
-  cross-inspiration projects (SIGMA v2.0, immoinvest) as if they were part of the
-  template.
+- Feature list no longer advertises a fixed count of 7 dimensions or names the
+  author's own cross-inspiration projects as if they were part of the template.
 - Design rationale in both READMEs and in `use-case-discovery.md` reworded from
   "Why 7 dimensions?" to the general case, aligned with the prompt's own 4–8
   recommendation.
@@ -279,9 +281,8 @@ no link to the original.
 - Bilingual README (English / German with Swiss spelling conventions)
 
 > **Note** — this entry was corrected on 2026-10-04. As originally written it listed
-> the author's personal configuration (Schulamt, city administration, AI working group,
-> education, family, investments, making; SIGMA v2.0, immoinvest, MCP servers,
-> Raspberry Pi, Notion) as though those dimensions and sources shipped with the prompt.
+> the author's personal configuration (context dimensions and cross-inspiration
+> sources) as though those dimensions and sources shipped with the prompt.
 > They did not — 1.0.0 shipped placeholders throughout, and Notion appeared only as the
 > tag field in step 4, never as a cross-inspiration source. See [1.0.1] for the
 > corresponding correction in the READMEs.
