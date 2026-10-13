@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.3-blue)
+![Version](https://img.shields.io/badge/version-3.0.4-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -77,6 +77,8 @@ Windows PowerShell 5.1 does not support `&&`; run the commands one by one or as 
 ## Configuration: the profile
 
 The profile is a Markdown file with up to six sections. Each is optional: a filled-in section fully replaces the skill's default of the same name, a missing one keeps the default. Entries with placeholders in square brackets are ignored. The template [`profil-vorlage.md`](.claude/skills/use-case-discovery/profil-vorlage.md) explains each section (in German).
+
+Edit the profile as plain text, for example in VS Code. Editors that display Markdown formatted and rewrite it on save damage the file (see [Troubleshooting](#troubleshooting)). The template's notes are HTML comments (`<!-- … -->`); you can delete them in your profile.
 
 The skill looks for the profile in three places; the first match wins:
 
@@ -156,6 +158,14 @@ claude -p "/use-case-discovery <source> --notion" --allowedTools "mcp__notion__n
 **Notion tool name.** `allowed-tools` pre-approves `notion-fetch` and `notion-search` under the prefixes `mcp__Notion__` and `mcp__notion__`, i.e. for a Notion server called `Notion` or `notion`. If your server has a different name (check with `claude mcp list`), adjust the entries in `SKILL.md`; otherwise Claude asks for permission on each run, and headless runs cannot read Notion.
 
 ### Troubleshooting
+
+**The model reports unclosed comments in the profile, or entries look altered.** An editor with Markdown formatting rewrote the file on save, for example Notepad on Windows 11 with formatting switched on. Typical traces: the closing `-->` of the comments are missing, list items start with `*` instead of `-`, and pasted asterisks appear escaped as `\*\*`. An unclosed comment can hide the entire section after it, such as the Notion export. To check in PowerShell:
+
+```powershell
+Select-String -Path "$HOME\.claude\use-case-discovery\profil.md" -Pattern '<!--|-->' | ForEach-Object { "$($_.LineNumber): $($_.Line.Trim())" }
+```
+
+Every line with `<!--` needs a later line with `-->`. If closers are missing, restore the profile from a clean copy and edit it as plain text only, or delete the comments altogether.
 
 **The profile line says the profile could not be loaded.** Check that `profil-laden.sh` in the skill folder is executable (`chmod +x ~/.claude/skills/use-case-discovery/profil-laden.sh`). Copying from a ZIP archive drops the executable bit.
 

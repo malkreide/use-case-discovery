@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.4] - 2026-10-13
+
 ### Changed
 - The entries for 1.0.0, 1.0.1 and 3.0.3 no longer list the author's personal
   configuration in detail; they describe the change in neutral terms.
+
+### Added
+- Both READMEs and the profile template: edit the profile as plain text. Found on
+  the first Windows setup: Notepad with Markdown formatting rewrote the profile on
+  save, dropped the closing `-->` of every HTML comment, turned `-` lists into
+  `*` and escaped pasted asterisks. An unclosed comment can hide the following
+  section, here the Notion export. A troubleshooting entry with a PowerShell
+  check for unmatched comment markers covers it.
 
 ## [3.0.3] - 2026-10-13
 

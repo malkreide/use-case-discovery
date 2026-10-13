@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.3-blue)
+![Version](https://img.shields.io/badge/version-3.0.4-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -75,6 +75,8 @@ Windows PowerShell 5.1 kennt `&&` nicht; führe die Befehle einzeln oder als Blo
 ## Konfiguration: das Profil
 
 Das Profil ist eine Markdown-Datei mit bis zu sechs Abschnitten. Jeder ist optional: Ein ausgefüllter Abschnitt ersetzt die gleichnamige Vorgabe des Skills vollständig, ein fehlender lässt sie gelten. Einträge mit Platzhaltern in eckigen Klammern werden ignoriert. Die Vorlage [`profil-vorlage.md`](.claude/skills/use-case-discovery/profil-vorlage.md) erklärt jeden Abschnitt.
+
+Bearbeite das Profil als reinen Text, etwa in VS Code. Editoren, die Markdown formatiert anzeigen und beim Speichern neu schreiben, beschädigen die Datei (siehe [Fehlerbehebung](#fehlerbehebung)). Die Hinweise der Vorlage stehen in HTML-Kommentaren (`<!-- … -->`); du kannst sie in deinem Profil löschen.
 
 Der Skill sucht das Profil an drei Orten, der erste Treffer gilt:
 
@@ -154,6 +156,14 @@ claude -p "/use-case-discovery <Quelle> --notion" --allowedTools "mcp__notion__n
 **Name des Notion-Werkzeugs.** `allowed-tools` gibt `notion-fetch` und `notion-search` unter den Präfixen `mcp__Notion__` und `mcp__notion__` frei, also für einen Notion-Server namens `Notion` oder `notion`. Heisst dein Server anders (prüfen mit `claude mcp list`), passe die Einträge in `SKILL.md` an. Sonst fragt Claude bei jedem Lauf nach der Berechtigung, und headless Läufe können Notion nicht lesen.
 
 ### Fehlerbehebung
+
+**Das Modell meldet unvollständige Kommentare im Profil, oder Einträge wirken verändert.** Ein Editor mit Markdown-Formatierung hat die Datei beim Speichern neu geschrieben, zum Beispiel Notepad unter Windows 11 mit eingeschalteter Formatierung. Typische Spuren: Die schliessenden `-->` der Kommentare fehlen, Aufzählungen beginnen mit `*` statt `-`, und eingefügte Sternchen erscheinen maskiert als `\*\*`. Ein Kommentar ohne Abschluss kann den ganzen folgenden Abschnitt verdecken, etwa den Notion-Export. Prüfen in PowerShell:
+
+```powershell
+Select-String -Path "$HOME\.claude\use-case-discovery\profil.md" -Pattern '<!--|-->' | ForEach-Object { "$($_.LineNumber): $($_.Line.Trim())" }
+```
+
+Jede Zeile mit `<!--` braucht eine spätere Zeile mit `-->`. Fehlen Abschlüsse, stelle das Profil aus einer sauberen Kopie wieder her und bearbeite es nur noch als reinen Text, oder lösche die Kommentare ganz.
 
 **Die Profilzeile meldet, dass kein Profil geladen werden konnte.** Prüfe, ob `profil-laden.sh` im Skill-Ordner ausführbar ist (`chmod +x ~/.claude/skills/use-case-discovery/profil-laden.sh`). Beim Kopieren aus einem ZIP-Archiv geht das Ausführungsrecht verloren.
 
