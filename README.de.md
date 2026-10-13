@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.5-blue)
+![Version](https://img.shields.io/badge/version-3.0.6-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
