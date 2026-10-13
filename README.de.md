@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.2-blue)
+![Version](https://img.shields.io/badge/version-3.0.3-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -180,17 +180,17 @@ git checkout -- .claude/skills/use-case-discovery/profil-laden.sh
 
 ### Beispiel: Kontextdimensionen im Profil
 
-Die folgende Belegung ist die Konfiguration des Autors — eine Illustration der *Art* von Kontrast, die die Matrix zum Laufen bringt, keine zu übernehmende Vorgabe:
+Ein erfundenes Beispiel, die Leiterin Digitales einer mittelgrossen Gemeinde. Es illustriert die *Art* von Kontrast, die die Matrix zum Laufen bringt, und ist keine zu übernehmende Vorgabe:
 
 | Dim | Bereich |
 |---|---|
-| A | Schulamt der Stadt Zürich |
-| B | Gesamte Stadtverwaltung (bereichsübergreifend) |
-| C | KI-Fachgruppe (KI-Governance im öffentlichen Sektor) |
-| D | Schulen & Bildung (operativ) |
-| E | Privat: Sohn & Familie |
-| F | Privat: Investitionen (Immobilien, ETF, Crypto) |
-| G | Privat: Technologie & Making (Raspberry Pi, MCP, Edge AI) |
+| A | Gemeindeverwaltung: Digitalisierung und Kommunikation |
+| B | Regionaler Gemeindeverband (Zusammenarbeit über Gemeindegrenzen) |
+| C | Fachgruppe Datenschutz und Informationssicherheit |
+| D | Einwohnerdienste (Schalter, Anliegen der Bevölkerung) |
+| E | Privat: Ehrenamt im Sportverein |
+| F | Privat: berufsbegleitende Weiterbildung |
+| G | Privat: Technologie & Making (Raspberry Pi, lokale KI) |
 
 Beachte die Spannweite: A–D unterscheiden sich in Massstab und Mandat innerhalb eines beruflichen Kontexts, E–G ergänzen private Bereiche mit völlig anderen Erfolgskriterien. Ein Tool, das in einem Bereich unauffällig ist, ist im anderen oft transformativ.
 

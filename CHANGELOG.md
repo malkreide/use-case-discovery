@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.3] - 2026-10-13
+
+### Changed
+- The example context dimensions in both READMEs are now an invented
+  configuration (head of digital services in a municipality) instead of the
+  author's own, which named family and investment details.
+
 ## [3.0.2] - 2026-10-13
 
 ### Fixed
