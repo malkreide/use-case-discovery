@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-10-27
+
+Makes the Notion database evaluable, e.g. for a dashboard that shows which
+dimensions and sources yield ideas that later get implemented.
+
+### Added
+- Notion export: optional property mappings for the origin (Herkunft), the three
+  scores (impact, feasibility, novelty), the source status and the analysis
+  date. Values come word for word from the export block; until now they sat
+  only in the page body, where Notion cannot filter or count them. Profiles
+  without the new lines behave as before.
+- Step 6b checks every mapped property against the database: a missing property
+  or a non-matching type leaves the value empty, as does a missing select
+  option for origin or source status (the rule that already applied to tags).
+  The preview names the properties that stay empty, with the reason.
+- Profile template: the new property lines with matching types, and a note to
+  maintain status and a result field by hand after creation.
+- tests/README: manual run M5 (missing property, wrong type); M1 now expects the
+  new properties to be filled.
+
+### Changed
+- Export block: `herkunft` is the dimension's name exactly as in the profile,
+  without its letter, or exactly `Kombination`; values containing a colon are
+  quoted so the block stays valid YAML. Against the unchanged skill, test case
+  T10 wrote `herkunft: M1` and `M2`, which would have split one dimension into
+  several categories across runs. T01 and T10 now check the origin values.
+- Step 6b forbids changing the database schema: no new properties, no new
+  options.
+
 ## [3.0.6] - 2026-10-13
 
 ### Changed

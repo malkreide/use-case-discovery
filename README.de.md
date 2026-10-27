@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.6-blue)
+![Version](https://img.shields.io/badge/version-3.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-kompatibel-blueviolet)
 
@@ -96,7 +96,7 @@ Die zweite Zeile des Outputs nennt, welches Profil verwendet wurde.
 
 **5 — Notion-Tags.** Die Optionen deiner Notion-Select-Eigenschaft, exakt in derselben Schreibweise. Pro Top-3-Use-Case wird genau ein Tag vergeben; neue Tags werden nie erfunden, sondern separat vorgeschlagen.
 
-**6 — Notion-Export.** Link zur Notion-Datenbank und welche Eigenschaft welchen Wert aufnimmt. Nur nötig für `--notion`.
+**6 — Notion-Export.** Link zur Notion-Datenbank und welche Eigenschaft welchen Wert aufnimmt. Nur nötig für `--notion`. Titel, Tag, Quelle und Status sind die Grundausstattung. Optional nimmt die Datenbank auch Herkunft, Bewertung (Impact, Umsetzbarkeit, Neuartigkeit), Quellenstatus und Analysedatum auf. Damit lässt sich der Bestand filtern und auswerten, etwa welche Dimensionen Ideen liefern, die später umgesetzt werden. Eigenschaften und Select-Optionen legst du in Notion selbst an; die Vorlage nennt die passenden Typen. Fehlt eine, bleibt der Wert leer, und der Skill vermerkt es.
 
 ---
 
@@ -124,7 +124,7 @@ Der Skill gibt die nötigen lesenden Werkzeuge vorab frei (`WebFetch`, `Read`, `
 /use-case-discovery https://github.com/[username]/[repo] --notion
 ```
 
-Mit `--notion` und einer Datenbank im Profil liest der Skill nach Abschluss der Analyse die Datenbank, sucht für jeden Top-3-Use-Case nach bestehenden Einträgen und legt nur neue Ideen an. Vor der Analyse schaut er nicht in die Datenbank, damit der Bestand die Auswahl nicht prägt. Vor dem ersten Schreiben nennt er, welche Seiten er anlegt. Bestehende Seiten werden nie geändert oder gelöscht. Ohne `--notion` schreibt der Skill nichts nach Notion; der YAML-Block am Ende jeder Analyse bleibt die Ablage.
+Mit `--notion` und einer Datenbank im Profil liest der Skill nach Abschluss der Analyse die Datenbank, sucht für jeden Top-3-Use-Case nach bestehenden Einträgen und legt nur neue Ideen an. Vor der Analyse schaut er nicht in die Datenbank, damit der Bestand die Auswahl nicht prägt. Vor dem ersten Schreiben nennt er, welche Seiten er anlegt und welche Eigenschaften leer bleiben. Bestehende Seiten werden nie geändert oder gelöscht, und das Schema der Datenbank bleibt unverändert: keine neuen Eigenschaften, keine neuen Optionen. Ohne `--notion` schreibt der Skill nichts nach Notion; der YAML-Block am Ende jeder Analyse bleibt die Ablage.
 
 Das Schreiben (`notion-create-pages`) gibt der Skill bewusst **nicht** vorab frei. Ob Claude Code vor dem Schreiben nachfragt, hängt aber von deinen Einstellungen ab: Hast du Notion-Werkzeuge früher dauerhaft erlaubt («Yes, and don't ask again») oder arbeitest du in einem Modus ohne Rückfragen, schreibt der Skill mit `--notion` ohne Bestätigung. Prüfen kannst du das in Claude Code mit `/permissions`: Einträge wie `mcp__notion`, `mcp__notion__*` oder `mcp__notion__notion-create-pages` unter «Allow» erlauben das Schreiben. Willst du vor jedem Schreiben gefragt werden, entferne sie; erlaubt bleiben nur `mcp__notion__notion-fetch` und `mcp__notion__notion-search`. Für headless Läufe gibst du das Schreiben ausdrücklich frei:
 
@@ -234,6 +234,9 @@ Solange die persönliche Konfiguration in derselben Datei steht wie die Analysel
 
 **Warum Notion nur mit `--notion`?**
 Schreiben in eine geteilte Datenbank ist eine Handlung mit Aussenwirkung. Sie soll bewusst ausgelöst werden, nicht als Nebeneffekt jeder Analyse. Die Doppelprüfung hält die Datenbank sauber und zeigt nebenbei, welche Ideen im eigenen Bestand schon existieren.
+
+**Warum Herkunft und Bewertung als Notion-Eigenschaften?**
+Was nur im Seiteninhalt steht, lässt sich in Notion weder filtern noch auswerten. Als Eigenschaften zeigen Herkunft, Bewertung, Quellenstatus und Datum über viele Läufe, welche Dimensionen und Quellen Ideen liefern, die später umgesetzt werden. Dafür muss die Herkunft in jedem Lauf gleich lauten: Der Export-Block nennt sie deshalb mit dem Namen der Dimension aus dem Profil, ohne Kürzel, oder als `Kombination`. Das Schema bleibt in deiner Hand; den Status und ein Ergebnisfeld pflegst du nach dem Anlegen selbst.
 
 ---
 

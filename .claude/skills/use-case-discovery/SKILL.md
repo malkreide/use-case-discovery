@@ -281,13 +281,19 @@ datum: <heutiges Datum, JJJJ-MM-TT>
 use_cases:
   - name: <Name>
     tag: <Notion-Tag>
-    herkunft: <Dimension oder Kombination>
+    herkunft: <Name der Dimension oder Kombination>
     bewertung: {impact: <1-3>, umsetzbarkeit: <1-3>, neuartigkeit: <1-3>}
     problem: <ein Satz>
     loesung: <ein Satz>
     risiken: <ein Satz>
     naechster_schritt: <ein Satz>
 ```
+
+`herkunft` ist der Name der Dimension, wörtlich wie im Profil und ohne Kürzel
+(aus «A — Verwaltung» wird `Verwaltung`), oder genau `Kombination` ohne Zusatz.
+Der Wert dient in Notion als Kategorie und muss deshalb über alle Läufe gleich
+lauten. Werte mit Doppelpunkt stehen in doppelten Anführungszeichen, damit der
+Block gültiges YAML bleibt.
 
 **6b — Notion-Export (nur mit `--notion`).** Ohne `--notion` in der Eingabe
 schreibst du nichts nach Notion. Mit `--notion` gilt:
@@ -302,9 +308,11 @@ daraus; ausgenommen ist nur eine Notion-Seite, die selbst die Quelle ist
    den Grund in einer Zeile «Notion-Export: nicht ausgeführt, …». Der
    Export-Block aus 6a bleibt die Ablage.
 2. **Datenbank lesen.** Lies die Datenbank aus dem Profil mit `notion-fetch`, um
-   Eigenschaftsnamen, Typen und die Optionen der Tag-Eigenschaft zu kennen.
-   Fehlt ein Tag dort als Option, lege ihn nicht an, sondern lass die
-   Eigenschaft leer und vermerke es.
+   Eigenschaftsnamen, Typen und die Optionen der Select-Eigenschaften zu kennen.
+   Prüfe jede Eigenschaft, die das Profil zuordnet: Fehlt sie in der Datenbank
+   oder passt ihr Typ nicht zum Wert (Liste in Punkt 5), bleibt sie leer. Fehlt
+   ein Wert bei einer Select-Eigenschaft (Tag, Herkunft, Quellenstatus) als
+   Option, lege ihn nicht an, sondern lass die Eigenschaft leer. Vermerke beides.
 3. **Doppel prüfen.** Suche für jeden Top-3-Use-Case mit `notion-search` in der
    Datenbank nach dem Namen und den Kernbegriffen. Beschreibt ein bestehender
    Eintrag im Kern dieselbe Idee, lege keinen neuen an; nenne den bestehenden
@@ -312,15 +320,30 @@ daraus; ausgenommen ist nur eine Notion-Seite, die selbst die Quelle ist
    bereits erfasst; die Top-3 aus Schritt 4 bleiben unverändert.
 4. **Vorschau.** Nenne vor dem ersten Schreibaufruf in je einer Zeile, welche
    Use Cases du anlegst (Name, Tag) und welche du als bereits erfasst einstufst,
-   mit einem Halbsatz Begründung. Ob Claude Code danach nachfragt, hängt von den
-   Berechtigungen ab; die Vorschau gilt auch ohne Rückfrage.
+   mit einem Halbsatz Begründung. Bleiben Eigenschaften aus dem Profil leer,
+   nenne sie in einer weiteren Zeile mit Grund. Ob Claude Code danach nachfragt,
+   hängt von den Berechtigungen ab; die Vorschau gilt auch ohne Rückfrage.
 5. **Anlegen.** Lege jeden übrigen Use Case als neue Seite in genau dieser
-   Datenbank an (`notion-create-pages`), mit den Eigenschaften aus dem Profil.
+   Datenbank an (`notion-create-pages`). Setze nur die Eigenschaften, die das
+   Profil zuordnet, mit den Werten wörtlich aus dem Export-Block (6a):
+
+   | Eigenschaft im Profil | Wert | Passender Typ |
+   |---|---|---|
+   | Titel | `name` | Titel |
+   | Tag | `tag` | Select oder Multi-Select |
+   | Quelle | `quelle` | URL oder Text |
+   | Status | Wert aus dem Profil | Status oder Select |
+   | Herkunft | `herkunft` | Select oder Text |
+   | Impact, Umsetzbarkeit, Neuartigkeit | je der Wert aus `bewertung` | Zahl |
+   | Quellenstatus | `quellenstatus` | Select oder Text |
+   | Analysedatum | `datum` | Datum |
+
    Der Seiteninhalt enthält Problem, Lösung, Risiken & Voraussetzungen, Nächster
    Schritt, Bewertung und Quelle.
-6. **Grenzen.** Ändere oder lösche keine bestehenden Seiten und schreibe in keine
-   andere Datenbank. Wird eine Schreibaktion abgelehnt, versuche sie nicht auf
-   anderem Weg.
+6. **Grenzen.** Ändere oder lösche keine bestehenden Seiten, ändere das Schema
+   der Datenbank nicht (keine neuen Eigenschaften, keine neuen Optionen) und
+   schreibe in keine andere Datenbank. Wird eine Schreibaktion abgelehnt,
+   versuche sie nicht auf anderem Weg.
 
 Schliesse mit einer Zeile pro Use Case: *angelegt* (mit Link), *bereits
 erfasst* (mit Link) oder *nicht angelegt* (mit Grund). Schreibe jeden Link als
@@ -373,3 +396,10 @@ Doppelprüfung hält die Datenbank sauber und zeigt nebenbei, welche Ideen im
 eigenen Bestand schon existieren. Gelesen wird der Bestand erst nach der
 Analyse: Sonst lehnt sich die Auswahl an Bekanntes an, und der Skill schlägt mit
 wachsender Datenbank immer wieder dieselben Ideen vor.
+
+**Warum Herkunft und Bewertung als Notion-Eigenschaften?**
+Was nur im Seiteninhalt steht, lässt sich in Notion weder filtern noch
+auswerten. Als Eigenschaften zeigen Herkunft, Bewertung, Quellenstatus und
+Datum über viele Läufe, welche Dimensionen und Quellen Ideen liefern, die später
+umgesetzt werden. Das Schema bleibt bei der nutzenden Person: Der Skill füllt
+nur, was dort angelegt ist, und vermerkt, was fehlt.

@@ -112,6 +112,27 @@ DEFAULT_TAGS = (
     "Lernen & Bildung|Daten & Analyse|Governance & Compliance|Prototyp & Making"
 )
 
+
+# Die Herkunft im Export-Block landet als Select-Option in Notion und muss
+# deshalb über alle Läufe gleich lauten: Name der Dimension ohne Kürzel, oder
+# «Kombination».
+def herkunft(*dimensions: str) -> list[Check]:
+    allowed = "|".join(re.escape(d) for d in (*dimensions, "Kombination"))
+    value = r"[ \t]*[\"'`]?(?:" + allowed + r")[\"'`]?[ \t]*$"
+    return [
+        Check(
+            MUSS,
+            "Export-Block: Herkunft bei allen Top-3 als Dimension oder «Kombination»",
+            "count",
+            r"(?m)^\s*herkunft:" + value,
+            minimum=3,
+        ),
+        absent(
+            r"(?m)^\s*herkunft:(?!" + value + ")",
+            "Export-Block: keine Herkunft mit Kürzel oder Zusatz",
+        ),
+    ]
+
 ABORTED = [
     absent(MATRIX, "Keine Use-Case-Matrix (Abbruch)"),
     absent(SCORE_TABLE, "Keine Bewertungstabelle (Abbruch)"),
@@ -134,7 +155,12 @@ CASES = [
         "T01",
         "Vollständige lokale Quelle",
         f"{FIXTURES}/werkzeug.md",
-        [status("vollständig gelesen"), *FULL_ANALYSIS, *WITHOUT_PROFILE],
+        [
+            status("vollständig gelesen"),
+            *FULL_ANALYSIS,
+            *WITHOUT_PROFILE,
+            *herkunft("Organisation", "Öffentlichkeit & Kundschaft", "Privat & Experiment"),
+        ],
     ),
     Case(
         "T02",
@@ -257,6 +283,7 @@ CASES = [
                 minimum=3,
             ),
             absent(r"(?m)^\s*tag:\s*[\"'`]?(" + DEFAULT_TAGS + ")", "Keine Vorgabe-Tags im Export-Block"),
+            *herkunft("Musikschule Seefeld", "Quartierverein Riesbach", "Privat: Chorleitung"),
             contains(r"(?i)Notion-Export:?\**:?\s*nicht ausgeführt", "Meldet, dass der Notion-Export nicht ausgeführt wurde"),
         ],
         profile=f"{FIXTURES}/profil-beispiel.md",
