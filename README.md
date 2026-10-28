@@ -1,6 +1,6 @@
 # use-case-discovery
 
-![Version](https://img.shields.io/badge/version-3.0.6-blue)
+![Version](https://img.shields.io/badge/version-3.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet)
 
@@ -98,7 +98,7 @@ The second line of the output names the profile that was used.
 
 **5 — Notion tags (Notion-Tags).** The options of your Notion select property, spelled exactly as in Notion. Each top-3 use case gets exactly one tag; new tags are never invented but proposed separately.
 
-**6 — Notion export (Notion-Export).** Link to the Notion database and which property takes which value. Only needed for `--notion`.
+**6 — Notion export (Notion-Export).** Link to the Notion database and which property takes which value. Only needed for `--notion`. Title, tag, source and status are the basic set. Optionally the database also takes the origin, the scores (impact, feasibility, novelty), the source status and the analysis date. This lets you filter and evaluate your collection, for example which dimensions yield ideas that later get implemented. You create the properties and select options in Notion yourself; the template names the matching types. If one is missing, the value stays empty and the skill notes it.
 
 ---
 
@@ -126,7 +126,7 @@ The skill pre-approves the read-only tools it needs (`WebFetch`, `Read`, `Glob`,
 /use-case-discovery https://github.com/[username]/[repo] --notion
 ```
 
-With `--notion` and a database in the profile, the skill reads the database once the analysis is complete, searches it for existing entries for each top-3 use case, and creates only new ideas. It does not look into the database before the analysis, so the existing entries cannot shape the selection. Before the first write it lists the pages it will create. Existing pages are never changed or deleted. Without `--notion` the skill writes nothing to Notion; the YAML block at the end of every analysis is the record.
+With `--notion` and a database in the profile, the skill reads the database once the analysis is complete, searches it for existing entries for each top-3 use case, and creates only new ideas. It does not look into the database before the analysis, so the existing entries cannot shape the selection. Before the first write it lists the pages it will create and which properties stay empty. Existing pages are never changed or deleted, and the database schema stays as it is: no new properties, no new options. Without `--notion` the skill writes nothing to Notion; the YAML block at the end of every analysis is the record.
 
 The skill deliberately does **not** pre-approve writing (`notion-create-pages`). Whether Claude Code asks before writing depends on your settings, though: if you once allowed Notion tools permanently ("Yes, and don't ask again") or work in a mode without prompts, the skill writes with `--notion` without confirmation. Check with `/permissions` in Claude Code: entries such as `mcp__notion`, `mcp__notion__*` or `mcp__notion__notion-create-pages` under "Allow" permit writing. To be asked before every write, remove them; only `mcp__notion__notion-fetch` and `mcp__notion__notion-search` need to stay allowed. For headless runs, allow writing explicitly:
 
@@ -236,6 +236,9 @@ As long as the personal configuration sits in the same file as the analysis logi
 
 **Why Notion only with `--notion`?**
 Writing to a shared database is an action with external effect. It should be triggered deliberately, not as a side effect of every analysis. The duplicate check keeps the database clean and shows which ideas already exist in your own collection.
+
+**Why origin and scores as Notion properties?**
+What sits only in the page body cannot be filtered or evaluated in Notion. As properties, origin, scores, source status and date show across many runs which dimensions and sources yield ideas that later get implemented. For that, the origin has to read the same in every run: the export block therefore gives the dimension's name from the profile, without its letter, or `Kombination`. The schema stays in your hands; you maintain the status and a result field yourself after the page is created.
 
 ---
 

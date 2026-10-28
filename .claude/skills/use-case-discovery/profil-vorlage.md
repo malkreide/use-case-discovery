@@ -120,7 +120,25 @@ Skill nie nach Notion.
 
 - Datenbank: Link zur Notion-Datenbank (Datenbank-Ansicht kopieren).
 - Eigenschaften: welche Notion-Eigenschaft welchen Wert aufnimmt. Die Namen
-  müssen exakt mit denen in Notion übereinstimmen.
+  müssen exakt mit denen in Notion übereinstimmen. Zeilen, die noch einen
+  Platzhalter enthalten, werden ignoriert.
+
+Titel, Tag, Quelle und Status sind die Grundausstattung. Die übrigen Zeilen
+sind optional und machen die Datenbank auswertbar, etwa für ein Dashboard:
+- Herkunft: Select mit den Namen deiner Kontextdimensionen (ohne Kürzel) und
+  der Option «Kombination», oder Text.
+- Impact, Umsetzbarkeit, Neuartigkeit: je eine Zahl-Eigenschaft (Werte 1–3).
+- Quellenstatus: Select mit «vollständig gelesen» und «teilweise gelesen»,
+  oder Text.
+- Analysedatum: Datums-Eigenschaft.
+
+Lege Eigenschaften und Optionen zuerst in Notion an. Der Skill ändert das
+Schema der Datenbank nie: Fehlt eine Eigenschaft oder Option, bleibt der Wert
+leer, und der Skill vermerkt es.
+
+Den Status und das Ergebnis pflegst du danach von Hand, z.B. Idee → geprüft →
+Pilot → umgesetzt oder verworfen, dazu eine Text-Eigenschaft für das Ergebnis.
+Der Skill setzt den Status nur beim Anlegen und ändert bestehende Einträge nie.
 -->
 
 - **Datenbank:** [https://www.notion.so/…]
@@ -129,3 +147,9 @@ Skill nie nach Notion.
   - Tag → `[Name der Select-Eigenschaft]`
   - Quelle → `[Name der URL-Eigenschaft]`
   - Status → `[Name der Status-Eigenschaft]`: `[Wert für neue Einträge, z.B. Idee]`
+  - Herkunft → `[Name der Select- oder Text-Eigenschaft]`
+  - Impact → `[Name der Zahl-Eigenschaft]`
+  - Umsetzbarkeit → `[Name der Zahl-Eigenschaft]`
+  - Neuartigkeit → `[Name der Zahl-Eigenschaft]`
+  - Quellenstatus → `[Name der Select- oder Text-Eigenschaft]`
+  - Analysedatum → `[Name der Datums-Eigenschaft]`
